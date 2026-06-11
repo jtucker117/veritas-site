@@ -84,6 +84,33 @@ git push -u origin main
 2. Reference it in the HTML, e.g. `<img src="images/my-photo.jpg" alt="...">`, or set a CSS `background-image: url('images/my-photo.jpg')`.
 3. `git add . && git commit -m "add image" && git push` — Railway redeploys automatically.
 
+## 🤖 AI intake chatbot (Claude) + email leads
+
+The site has a pop-up AI assistant (bottom-right) that scopes a visitor's project
+(project type, location/timeline, budget, contact info) and emails a summary to your team.
+
+**It needs environment variables set in Railway** (the chat shows a friendly
+"email us" fallback until these are configured — so it never breaks):
+
+| Variable | What it is |
+|---|---|
+| `ANTHROPIC_API_KEY` | Your Claude API key from console.anthropic.com |
+| `GMAIL_USER` | The Gmail/Workspace address that sends lead emails (e.g. info@veritasgrouptx.com) |
+| `GMAIL_APP_PASSWORD` | A Google **App Password** (16 chars) — NOT your normal password |
+| `LEAD_TO` | Where leads are emailed (optional; defaults to info@veritasgrouptx.com) |
+| `ANTHROPIC_MODEL` | (optional) defaults to `claude-3-5-sonnet-latest` |
+
+### How to set them in Railway
+1. Railway → your service → **Variables** tab → **New Variable**.
+2. Add each name + value above. Railway redeploys automatically.
+
+### Getting a Gmail App Password
+1. Your Google account needs **2-Step Verification** turned on.
+2. Google Account → **Security** → **2-Step Verification** → **App passwords**.
+3. Create one (name it “Veritas site”), copy the 16-character code into `GMAIL_APP_PASSWORD`.
+
+See `.env.example` for the full list. **Never commit real keys** — they only live in Railway.
+
 ## Notes
 - Both pages share `styles.css`, so a color/spacing tweak applies everywhere consistently.
 - The site is fully responsive (mobile menu included) and supports reduced-motion preferences.
