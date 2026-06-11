@@ -98,18 +98,22 @@ app.post('/api/chat', async (req, res) => {
   }
 });
 
-// ---- Diagnostic: surfaces the real Anthropic error (safe — no secrets) ----
+// ---- Diagnostic: lists the models THIS key can access (safe — no secrets) ----
 app.get('/api/diag', async (req, res) => {
-  if (!anthropic) return res.json({ ai: false, note: 'ANTHROPIC_API_KEY not set' });
+  if (!process.env.ANTHROPIC_API_KEY) return res.json({ ai: false, note: 'ANTHROPIC_API_KEY not set' });
   try {
-    var r = await anthropic.messages.create({
-      model: process.env.ANTHROPIC_MODEL || 'claude-3-5-sonnet-20241022',
-      max_tokens: 20,
-      messages: [{ role: 'user', content: 'Say OK' }]
+    // Ask Anthropic which models this key is allowed to use.
+    var r = await fetch('https://api.anthropic.com/v1/models', {
+      headers: {
+        'x-api-key': process.env.ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01'
+      }
     });
-    res.json({ ok: true, model_used: process.env.ANTHROPIC_MODEL || 'claude-3-5-sonnet-20241022', reply: (r.content || []).map(c => c.text).join('') });
+    var data = await r.json();
+    var ids = (data.data || []).map(function (m) { return m.id; });
+    res.json({ ok: r.ok, available_models: ids, raw: ids.length ? undefined : data });
   } catch (e) {
-    res.json({ ok: false, status: e.status, error: (e.message || '').slice(0, 400) });
+    res.json({ ok: false, error: (e.message || '').slice(0, 400) });
   }
 });
 
