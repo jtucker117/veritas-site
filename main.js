@@ -2,6 +2,10 @@
    main.js — small interactions (shared by both pages)
    ============================================================ */
 
+// Mark that JS is active so reveal animations can engage.
+// (If JS never runs, content stays fully visible — see styles.css.)
+document.documentElement.classList.add('js');
+
 // Current year in footer
 (function () {
   document.querySelectorAll('#year').forEach(function (el) {
@@ -53,6 +57,14 @@
         io.unobserve(e.target);
       }
     });
-  }, { threshold: 0.15 });
+  }, { threshold: 0.12, rootMargin: '0px 0px -5% 0px' });
   items.forEach(function (el) { io.observe(el); });
+
+  // Safety net: reveal anything still hidden a moment after full load,
+  // so no section can ever stay blank if the observer is bypassed.
+  window.addEventListener('load', function () {
+    setTimeout(function () {
+      items.forEach(function (el) { el.classList.add('in'); });
+    }, 1200);
+  });
 })();
