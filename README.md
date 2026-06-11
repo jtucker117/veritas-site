@@ -60,6 +60,30 @@ The logos are images in the `images/` folder:
 
 ---
 
+## 🚂 Going live on Railway (your domain is already there)
+
+This project includes a tiny `server.js` (Express) so Railway can host it.
+
+1. **Push to GitHub** (see commands below).
+2. In **Railway** → New Project → **Deploy from GitHub repo** → pick this repo.
+   - Railway auto-detects Node, runs `npm install`, then `npm start`.
+   - No build command needed; it serves the static files.
+3. **Custom domain:** Railway project → your service → **Settings → Networking → Custom Domain** → add your domain. Since the domain was bought through Railway, it links automatically (Railway manages the DNS + HTTPS).
+4. Every `git push` redeploys automatically.
+
+### First-time GitHub push
+```bash
+# from the veritas-site folder
+git remote add origin https://github.com/<your-username>/<your-repo>.git
+git branch -M main
+git push -u origin main
+```
+
+## Adding custom / stock images later
+1. Drop the image file into the `images/` folder.
+2. Reference it in the HTML, e.g. `<img src="images/my-photo.jpg" alt="...">`, or set a CSS `background-image: url('images/my-photo.jpg')`.
+3. `git add . && git commit -m "add image" && git push` — Railway redeploys automatically.
+
 ## Notes
 - Both pages share `styles.css`, so a color/spacing tweak applies everywhere consistently.
 - The site is fully responsive (mobile menu included) and supports reduced-motion preferences.
