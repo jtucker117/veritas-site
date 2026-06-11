@@ -559,6 +559,193 @@ p { text-wrap: pretty; }
 }
 .back-link:hover { color: var(--accent); }
 
+/* ============================================================
+   TEXAS SERVICE-AREA MAP
+   ============================================================ */
+.map-wrap {
+  background: color-mix(in srgb, var(--bg) 55%, #000);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  padding: clamp(var(--space-6), 4vw, var(--space-12));
+}
+#tx-map {
+  width: 100%;
+  max-width: 760px;
+  height: auto;
+  margin: 0 auto;
+  display: block;
+  overflow: visible;
+}
+.tx-outline {
+  fill: color-mix(in srgb, var(--panel) 80%, var(--bg));
+  stroke: var(--border-mid);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+}
+.tx-triangle {
+  fill: color-mix(in srgb, var(--accent) 18%, transparent);
+  stroke: color-mix(in srgb, var(--accent) 55%, transparent);
+  stroke-width: 2;
+  stroke-dasharray: 8 6;
+}
+.tx-city { fill: var(--white); stroke: var(--accent); stroke-width: 3; }
+.tx-city--faint { fill: var(--text-faint); stroke: var(--border-mid); }
+.tx-label {
+  fill: var(--white);
+  font-family: var(--font);
+  font-size: 22px;
+  font-weight: 600;
+}
+.tx-label--faint { fill: var(--text-faint); font-weight: 500; font-size: 19px; }
+.tx-label--hq { fill: var(--accent); font-weight: 700; }
+.tx-hq { fill: var(--accent); }
+.tx-hq-ring {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.5;
+  opacity: 0.6;
+  transform-origin: center;
+  animation: tx-pulse 2.4s ease-out infinite;
+}
+@keyframes tx-pulse {
+  0% { r: 12; opacity: 0.7; }
+  100% { r: 30; opacity: 0; }
+}
+.tx-project {
+  fill: var(--accent);
+  stroke: var(--white);
+  stroke-width: 2;
+  cursor: pointer;
+}
+.tx-project:hover { fill: var(--accent-hover); }
+
+.map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-6);
+  margin-top: var(--space-8);
+}
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--text-soft);
+}
+.legend-item .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+.dot-hq { background: var(--accent); }
+.dot-city { background: var(--white); border: 2px solid var(--accent); }
+.dot-project { background: var(--accent); border: 2px solid var(--white); }
+.map-note { text-align: center; margin-top: var(--space-4); font-size: var(--text-sm); color: var(--accent); font-weight: 600; }
+
+@media (max-width: 600px) {
+  .tx-label { font-size: 28px; }
+  .tx-label--faint { font-size: 24px; }
+}
+
+/* ============================================================
+   CHAT POP-UP WIDGET (self-contained, no third party)
+   ============================================================ */
+.chat-launcher {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 200;
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-full);
+  background: var(--accent);
+  color: var(--white);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 10px 30px color-mix(in srgb, var(--accent) 45%, transparent), 0 4px 12px rgba(0,0,0,0.3);
+  transition: transform 0.25s var(--ease), background 0.2s var(--ease);
+}
+.chat-launcher:hover { transform: translateY(-3px) scale(1.04); background: var(--accent-hover); }
+.chat-launcher svg { width: 26px; height: 26px; }
+.chat-launcher .icon-close { display: none; }
+.chat-launcher.open .icon-chat { display: none; }
+.chat-launcher.open .icon-close { display: block; }
+
+.chat-panel {
+  position: fixed;
+  bottom: 96px;
+  right: 24px;
+  z-index: 200;
+  width: min(360px, calc(100vw - 48px));
+  background: var(--panel);
+  border: 1px solid var(--border-mid);
+  border-radius: var(--radius);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  overflow: hidden;
+  transform: translateY(16px) scale(0.96);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.28s var(--ease), opacity 0.28s var(--ease);
+}
+.chat-panel.open { transform: none; opacity: 1; pointer-events: auto; }
+
+.chat-head {
+  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 60%, #000));
+  color: var(--white);
+  padding: var(--space-6);
+}
+.chat-head h4 { font-size: var(--text-lg); margin-bottom: 4px; }
+.chat-head p { font-size: var(--text-sm); opacity: 0.92; }
+
+.chat-body { padding: var(--space-6); display: grid; gap: var(--space-4); }
+.chat-quick { display: grid; gap: var(--space-3); }
+.chat-quick a {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--white);
+  background: color-mix(in srgb, var(--bg) 55%, #000);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  padding: 0.7rem 0.9rem;
+}
+.chat-quick a:hover { border-color: var(--accent); color: var(--accent); }
+.chat-quick a svg { width: 18px; height: 18px; flex: none; }
+
+.chat-form { display: grid; gap: var(--space-3); }
+.chat-form label { font-size: var(--text-xs); color: var(--text-soft); font-weight: 600; }
+.chat-form input, .chat-form textarea {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border-mid);
+  border-radius: var(--radius-sm);
+  color: var(--white);
+  font-size: var(--text-sm);
+  padding: 0.6rem 0.75rem;
+}
+.chat-form textarea { resize: vertical; min-height: 72px; }
+.chat-form input::placeholder, .chat-form textarea::placeholder { color: var(--text-faint); }
+.chat-send {
+  background: var(--accent);
+  color: var(--white);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  padding: 0.7rem 1rem;
+}
+.chat-send:hover { background: var(--accent-hover); }
+.chat-divider {
+  text-align: center;
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 480px) {
+  .chat-launcher { bottom: 16px; right: 16px; }
+  .chat-panel { bottom: 84px; right: 16px; }
+}
+
 /* Reveal-on-scroll.
    Only hidden when JS is active (html.js). If JS fails/doesn't run,
    content stays fully visible — no blank sections. */
