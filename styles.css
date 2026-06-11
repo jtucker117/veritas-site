@@ -299,6 +299,11 @@ p { text-wrap: pretty; }
   opacity: 0.5;
 }
 .hero-inner { position: relative; z-index: 1; max-width: 880px; }
+.hero-logo {
+  width: clamp(180px, 22vw, 300px);
+  height: auto;
+  margin-bottom: var(--space-8);
+}
 .hero h1 {
   font-size: var(--text-hero);
   font-weight: 800;
@@ -570,11 +575,11 @@ p { text-wrap: pretty; }
 }
 #tx-map {
   width: 100%;
-  max-width: 760px;
+  max-width: 720px;
   height: auto;
   margin: 0 auto;
   display: block;
-  overflow: visible;
+  overflow: hidden;
 }
 .tx-outline {
   fill: color-mix(in srgb, var(--panel) 80%, var(--bg));
@@ -598,6 +603,7 @@ p { text-wrap: pretty; }
 }
 .tx-label--faint { fill: var(--text-faint); font-weight: 500; font-size: 19px; }
 .tx-label--hq { fill: var(--accent); font-weight: 700; }
+.tx-label--left { text-anchor: end; }
 .tx-hq { fill: var(--accent); }
 .tx-hq-ring {
   fill: none;

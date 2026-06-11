@@ -61,14 +61,26 @@
 
   var layer = document.getElementById('tx-pins');
 
+  // Place a label left or right of a point so it stays inside the viewBox.
+  // viewBox right edge is ~980; if the label would run past it, anchor it to the left.
+  var RIGHT_EDGE = 940;
+  function addLabel(p, textStr, extraClass) {
+    var goLeft = p.x > RIGHT_EDGE - textStr.length * 13;
+    var label = el('text', {
+      x: goLeft ? p.x - 14 : p.x + 14,
+      y: p.y + 5,
+      class: 'tx-label' + (extraClass || '') + (goLeft ? ' tx-label--left' : '')
+    });
+    label.textContent = textStr;
+    layer.appendChild(label);
+  }
+
   // City dots + labels
   CITIES.forEach(function (c) {
     var p = project(c.lon, c.lat);
     var dot = el('circle', { cx: p.x, cy: p.y, r: c.faint ? 6 : 8, class: 'tx-city' + (c.faint ? ' tx-city--faint' : '') });
     layer.appendChild(dot);
-    var label = el('text', { x: p.x + 14, y: p.y + 5, class: 'tx-label' + (c.faint ? ' tx-label--faint' : '') });
-    label.textContent = c.name;
-    layer.appendChild(label);
+    addLabel(p, c.name, c.faint ? ' tx-label--faint' : '');
   });
 
   // HQ marker (star-ish)
@@ -77,7 +89,8 @@
   layer.appendChild(hqMark);
   var hqRing = el('circle', { cx: hq.x, cy: hq.y, r: 18, class: 'tx-hq-ring' });
   layer.appendChild(hqRing);
-  var hqLabel = el('text', { x: hq.x + 22, y: hq.y - 8, class: 'tx-label tx-label--hq' });
+  var hqGoLeft = hq.x > RIGHT_EDGE - 10 * 13;
+  var hqLabel = el('text', { x: hqGoLeft ? hq.x - 22 : hq.x + 22, y: hq.y - 10, class: 'tx-label tx-label--hq' + (hqGoLeft ? ' tx-label--left' : '') });
   hqLabel.textContent = 'Veritas HQ';
   layer.appendChild(hqLabel);
 
