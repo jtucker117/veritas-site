@@ -56,19 +56,60 @@ app.post('/api/chat', async (req, res) => {
         fallback: true
       });
     }
-    const resp = await anthropic.messages.create({
-      model: process.env.ANTHROPIC_MODEL || 'claude-3-5-sonnet-latest',
-      max_tokens: 600,
-      system: SYSTEM_PROMPT,
-      messages: messages.map(m => ({ role: m.role === 'assistant' ? 'assistant' : 'user', content: String(m.content || '').slice(0, 4000) }))
-    });
+    // Try the configured model first, then fall back through known-good IDs.
+    var candidates = [
+      process.env.ANTHROPIC_MODEL,
+      'claude-3-5-sonnet-latest',
+      'claude-3-5-sonnet-20241022',
+      'claude-3-haiku-20240307'
+    ].filter(Boolean);
+
+    var resp, lastErr;
+    for (var i = 0; i < candidates.length; i++) {
+      try {
+        resp = await anthropic.messages.create({
+          model: candidates[i],
+          max_tokens: 600,
+          system: SYSTEM_PROMPT,
+          messages: messages.map(m => ({ role: m.role === 'assistant' ? 'assistant' : 'user', content: String(m.content || '').slice(0, 4000) }))
+        });
+        break; // success
+      } catch (e) {
+        lastErr = e;
+        // Only try the next model on a model-availability error; otherwise stop.
+        var msg = (e && e.message) || '';
+        if (!/model/i.test(msg) && !/not_found/i.test(msg) && !/404/.test(msg)) throw e;
+      }
+    }
+    if (!resp) throw (lastErr || new Error('no model available'));
+
     let reply = (resp.content || []).map(c => c.text || '').join('').trim();
     const leadReady = reply.includes('[LEAD_READY]');
     reply = reply.replace('[LEAD_READY]', '').trim();
     res.json({ reply, leadReady });
   } catch (err) {
-    console.error('chat error:', err.message);
-    res.status(400).json({ reply: "Sorry — something went wrong on our end. Please email info@veritasgrouptx.com and we'll help right away.", leadReady: false, error: true });
+    console.error('chat error:', err.status, err.message);
+    res.status(400).json({
+      reply: "Sorry — something went wrong on our end. Please email info@veritasgrouptx.com and we'll help right away.",
+      leadReady: false,
+      error: true,
+      detail: (err && err.message || '').slice(0, 300)
+    });
+  }
+});
+
+// ---- Diagnostic: surfaces the real Anthropic error (safe — no secrets) ----
+app.get('/api/diag', async (req, res) => {
+  if (!anthropic) return res.json({ ai: false, note: 'ANTHROPIC_API_KEY not set' });
+  try {
+    var r = await anthropic.messages.create({
+      model: process.env.ANTHROPIC_MODEL || 'claude-3-5-sonnet-latest',
+      max_tokens: 20,
+      messages: [{ role: 'user', content: 'Say OK' }]
+    });
+    res.json({ ok: true, model_used: process.env.ANTHROPIC_MODEL || 'claude-3-5-sonnet-latest', reply: (r.content || []).map(c => c.text).join('') });
+  } catch (e) {
+    res.json({ ok: false, status: e.status, error: (e.message || '').slice(0, 400) });
   }
 });
 
