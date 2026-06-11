@@ -59,8 +59,8 @@ app.post('/api/chat', async (req, res) => {
     // Try the configured model first, then fall back through known-good IDs.
     var candidates = [
       process.env.ANTHROPIC_MODEL,
-      'claude-3-5-sonnet-latest',
       'claude-3-5-sonnet-20241022',
+      'claude-3-5-sonnet-20240620',
       'claude-3-haiku-20240307'
     ].filter(Boolean);
 
@@ -103,11 +103,11 @@ app.get('/api/diag', async (req, res) => {
   if (!anthropic) return res.json({ ai: false, note: 'ANTHROPIC_API_KEY not set' });
   try {
     var r = await anthropic.messages.create({
-      model: process.env.ANTHROPIC_MODEL || 'claude-3-5-sonnet-latest',
+      model: process.env.ANTHROPIC_MODEL || 'claude-3-5-sonnet-20241022',
       max_tokens: 20,
       messages: [{ role: 'user', content: 'Say OK' }]
     });
-    res.json({ ok: true, model_used: process.env.ANTHROPIC_MODEL || 'claude-3-5-sonnet-latest', reply: (r.content || []).map(c => c.text).join('') });
+    res.json({ ok: true, model_used: process.env.ANTHROPIC_MODEL || 'claude-3-5-sonnet-20241022', reply: (r.content || []).map(c => c.text).join('') });
   } catch (e) {
     res.json({ ok: false, status: e.status, error: (e.message || '').slice(0, 400) });
   }
