@@ -27,6 +27,10 @@
   --vb-navy:          #00111F;  /* Dark Navy (page background) */
   --vb-slate:         #28313B;  /* Slate Gray (cards / panels) */
 
+  /* PLANNED DIVISIONS — used as per-card accents on the Ventures home */
+  --vpm-accent:       #10B981;  /* Emerald Green — Property Management */
+  --vc-accent:        #8B5CF6;  /* Purple — Community / Nonprofit */
+
   /* Shared neutrals */
   --white:            #FFFFFF;
   --text-soft:        rgba(255, 255, 255, 0.72);
@@ -498,9 +502,10 @@ p { text-wrap: pretty; }
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 14%, transparent);
-  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  /* Inherits per-card accent set by --card-accent, falls back to the page accent. */
+  color: var(--card-accent, var(--accent));
+  background: color-mix(in srgb, var(--card-accent, var(--accent)) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--card-accent, var(--accent)) 35%, transparent);
   border-radius: var(--radius-full);
   padding: 4px 12px;
   margin-bottom: var(--space-4);
