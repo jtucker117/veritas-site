@@ -325,6 +325,20 @@ p { text-wrap: pretty; }
   margin-bottom: var(--space-6);
 }
 .hero h1 .accent { color: var(--accent); }
+
+/* Service landing pages: single-column hero, tighter H1 + lead. The marketing
+   hero on builders.html scales the H1 up to 96px because it's in a 2-column
+   split with the V3 logo; the service pages don't have that ballast, so the
+   same size reads as oversized. Cap closer to 3.5rem and keep the lead at a
+   readable measure. */
+.hero.service-hero h1 {
+  font-size: clamp(2rem, 1.2rem + 2.4vw, 3.25rem);
+  line-height: 1.1;
+}
+.hero.service-hero .hero-lead {
+  max-width: 62ch;
+  font-size: var(--text-lg);
+}
 .hero-lead {
   font-size: var(--text-lg);
   color: var(--text-soft);
