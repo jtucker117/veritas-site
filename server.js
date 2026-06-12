@@ -2,13 +2,17 @@
    Veritas site server — static hosting + AI intake chatbot
    ============================================================
    Environment variables (set these in Railway → Variables):
-     ANTHROPIC_API_KEY   your Claude API key
-     ANTHROPIC_MODEL     optional model override (default: claude-haiku-4-5)
-     GMAIL_USER          the Gmail/Workspace address that sends mail (e.g. info@veritasgrouptx.com)
-     GMAIL_APP_PASSWORD  a Google "App Password" (NOT your normal password)
-     LEAD_TO             where lead summaries are emailed (default: info@veritasgrouptx.com)
+     ANTHROPIC_API_KEY     your Claude API key
+     ANTHROPIC_MODEL       optional model override (default: claude-haiku-4-5)
+     GMAIL_USER            the Gmail/Workspace address that sends mail (e.g. info@veritasgrouptx.com)
+     GMAIL_APP_PASSWORD    a Google "App Password" (NOT your normal password)
+     LEAD_TO               where lead summaries are emailed (default: info@veritasgrouptx.com)
+     BUILDERS_APP_URL      base URL of the Veritas Builders ops app (e.g. https://app.veritasgrouptx.com)
+     WEBSITE_INTAKE_TOKEN  shared secret matching the same env var on the app — leads are POSTed there for tracking
    If ANTHROPIC_API_KEY is missing, the chat falls back to a simple
    "email us" message so the site never breaks.
+   If BUILDERS_APP_URL + WEBSITE_INTAKE_TOKEN are unset, leads still email
+   but aren't forwarded to the ops app.
    ============================================================ */
 const express = require('express');
 const path = require('path');
@@ -298,12 +302,53 @@ Magnolia, TX | info@veritasgrouptx.com`,
       }
     }
 
-    return res.json({ ok: true, emailed: true, customerEmailed });
+    // Forward to the Builders ops app for lead tracking. Best-effort and
+    // fire-and-forget: a slow or down app must NEVER delay the response to
+    // the customer, and any failure here is logged but doesn't surface as
+    // an error on the lead email path.
+    let forwardedToApp = false;
+    if (summary && process.env.BUILDERS_APP_URL && process.env.WEBSITE_INTAKE_TOKEN) {
+      forwardLeadToApp(summary, photos).then(ok => {
+        if (ok) console.log('lead forwarded to app:', summary.customer_email);
+      }).catch(e => console.warn('lead forward failed:', e && e.message));
+      forwardedToApp = true;
+    }
+
+    return res.json({ ok: true, emailed: true, customerEmailed, forwardedToApp });
   } catch (err) {
     console.error('lead error:', err && err.message);
     return res.status(400).json({ ok: false, error: err && err.message });
   }
 });
+
+// Forward a finished lead to the Veritas Builders ops app so it lands in the
+// Leads inbox alongside leads created in the app itself. Returns true when the
+// app accepted the lead; logs and swallows any error so the website /api/lead
+// response is never blocked or coloured by the forwarding step.
+async function forwardLeadToApp(summary, photos) {
+  const base = (process.env.BUILDERS_APP_URL || '').replace(/\/+$/, '');
+  const token = process.env.WEBSITE_INTAKE_TOKEN;
+  if (!base || !token) return false;
+  try {
+    const r = await fetch(base + '/api/intake/website-lead', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-intake-token': token,
+      },
+      body: JSON.stringify({ lead: summary, photos: Array.isArray(photos) ? photos : [] }),
+    });
+    if (!r.ok) {
+      const detail = await r.text().catch(() => '');
+      console.warn('lead forward non-2xx:', r.status, detail.slice(0, 200));
+      return false;
+    }
+    return true;
+  } catch (e) {
+    console.warn('lead forward error:', e && e.message);
+    return false;
+  }
+}
 
 // ---- Health / config check ----
 app.get('/api/health', (req, res) => res.json({ ok: true, ai: HAS_AI, email: HAS_EMAIL, model: MODEL }));
