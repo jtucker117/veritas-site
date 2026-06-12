@@ -353,6 +353,29 @@ async function forwardLeadToApp(summary, photos) {
 // ---- Health / config check ----
 app.get('/api/health', (req, res) => res.json({ ok: true, ai: HAS_AI, email: HAS_EMAIL, model: MODEL }));
 
+// ─ 301 redirects: Veritas Builders moved to its own domain ──────────────────
+// Old Builders URLs lived at veritasgrouptx.com/builders, /kitchen-remodel,
+// etc. Builders now has its own site at veritasbuilderstx.com so Google can
+// rank it as a focused construction-company domain. 301 (permanent) tells
+// Google to transfer any existing PageRank to the new URL and update its
+// index. Drop these once the new domain has ranked for the relevant queries
+// (~6-12 months).
+const BUILDERS_HOME = 'https://veritasbuilderstx.com';
+function redirectToBuilders(pathSuffix) {
+  return (req, res) => res.redirect(301, BUILDERS_HOME + pathSuffix);
+}
+app.get('/builders', redirectToBuilders('/'));
+app.get('/builders.html', redirectToBuilders('/'));
+app.get('/kitchen-remodel', redirectToBuilders('/kitchen-remodel'));
+app.get('/kitchen-remodel.html', redirectToBuilders('/kitchen-remodel'));
+app.get('/bathroom-remodel', redirectToBuilders('/bathroom-remodel'));
+app.get('/bathroom-remodel.html', redirectToBuilders('/bathroom-remodel'));
+app.get('/home-additions', redirectToBuilders('/home-additions'));
+app.get('/home-additions.html', redirectToBuilders('/home-additions'));
+app.get('/roofing', redirectToBuilders('/roofing'));
+app.get('/roofing.html', redirectToBuilders('/roofing'));
+app.get(/^\/blog(\/.*)?$/, (req, res) => res.redirect(301, BUILDERS_HOME + req.originalUrl));
+
 // ---- Static site ----
 app.use(express.static(__dirname, { extensions: ['html'] }));
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
