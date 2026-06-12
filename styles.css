@@ -232,6 +232,16 @@ p { text-wrap: pretty; }
   box-shadow: 0 6px 20px color-mix(in srgb, var(--accent) 35%, transparent);
 }
 .btn-primary:hover { background: var(--accent-hover); transform: translateY(-2px); }
+
+/* Cross-brand modifier: button points to Veritas Builders, so paint it in
+   the Builders blue rather than the Ventures orange. Used on the nav CTA
+   so the link visually advertises the brand it leads to. */
+.btn-builders {
+  background: var(--vb-accent);
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--vb-accent) 35%, transparent);
+}
+.btn-builders:hover { background: var(--vb-accent-hover); }
+
 .btn-ghost {
   border: 1px solid var(--border-mid);
   color: var(--white);
