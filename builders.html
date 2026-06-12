@@ -34,6 +34,109 @@
   <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png" />
 
   <link rel="stylesheet" href="styles.css" />
+
+  <!-- ============================================================
+       STRUCTURED DATA — LocalBusiness / GeneralContractor + FAQ
+       Helps Google show rich results (business card panel, FAQ
+       drop-downs in search). Updated when address / phone change.
+       ============================================================ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "GeneralContractor",
+    "@id": "https://veritasgrouptx.com/builders#business",
+    "name": "Veritas Builders",
+    "image": "https://veritasgrouptx.com/images/veritas-builders-logo.png",
+    "url": "https://veritasgrouptx.com/builders",
+    "telephone": "",
+    "email": "info@veritasgrouptx.com",
+    "priceRange": "$$",
+    "description": "Veritas Builders is a general contractor based in Magnolia, TX serving Greater Houston and Montgomery County. Commercial and residential renovation, remodeling, new construction, and site work — done right from estimate to handover.",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Magnolia",
+      "addressRegion": "TX",
+      "addressCountry": "US"
+    },
+    "areaServed": [
+      { "@type": "City", "name": "Magnolia, TX" },
+      { "@type": "City", "name": "The Woodlands, TX" },
+      { "@type": "City", "name": "Conroe, TX" },
+      { "@type": "City", "name": "Tomball, TX" },
+      { "@type": "City", "name": "Cypress, TX" },
+      { "@type": "City", "name": "Spring, TX" },
+      { "@type": "City", "name": "Katy, TX" },
+      { "@type": "City", "name": "Houston, TX" },
+      { "@type": "City", "name": "Pinehurst, TX" },
+      { "@type": "AdministrativeArea", "name": "Montgomery County, TX" }
+    ],
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Veritas Builders Services",
+      "itemListElement": [
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Kitchen Remodel" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Bathroom Remodel" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Home Additions" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Roofing" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "New Construction" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Commercial Build-Out" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Site Work" } }
+      ]
+    },
+    "sameAs": [
+      "https://veritasgrouptx.com/"
+    ]
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What areas does Veritas Builders serve?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Veritas Builders is headquartered in Magnolia, TX and serves Greater Houston and all of Montgomery County — including The Woodlands, Conroe, Tomball, Cypress, Spring, Katy, and Pinehurst. We'll travel to Dallas and Austin for the right project, and consider other Texas locations case-by-case."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do you handle both residential and commercial projects?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. We handle residential remodeling and new construction (kitchens, bathrooms, additions, whole-home builds) as well as commercial build-outs and renovations. The same team standards apply to both."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I get an estimate?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The fastest way is the chat assistant on this site — share a few details and our team follows up within one business day. You can also email info@veritasgrouptx.com or fill out the contact form."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are you licensed and insured?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes — Veritas Builders carries general liability and workers' compensation coverage, and operates under all applicable Texas contractor licensing requirements for the trades we self-perform or sub out."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do you handle change orders?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Change orders are documented in writing before any extra work begins, with a clear scope, price, and timeline impact so there are no surprises on the invoice. We won't proceed on a verbal-only change."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
 
@@ -118,6 +221,38 @@
             <h3>Project Management</h3>
             <p>Detailed estimating, scheduling, and on-site coordination so your project runs smoothly start to finish.</p>
           </article>
+        </div>
+
+        <!-- Popular service deep-links — internal links power on-page SEO and
+             give visitors a clear next step on the project they actually came for. -->
+        <div style="margin-top: var(--space-12)">
+          <p class="section-lead" style="margin-bottom: var(--space-6)">Popular project types — see what's included and how we work:</p>
+          <div class="cards">
+            <article class="card">
+              <span class="card-tag">Most Requested</span>
+              <h3><a href="kitchen-remodel" style="color:inherit">Kitchen Remodel</a></h3>
+              <p>Cabinets, counters, tile, plumbing, and layout changes — full kitchens from estimate to handover.</p>
+              <a href="kitchen-remodel" class="card-link">See kitchen services <span>→</span></a>
+            </article>
+            <article class="card">
+              <span class="card-tag">Most Requested</span>
+              <h3><a href="bathroom-remodel" style="color:inherit">Bathroom Remodel</a></h3>
+              <p>Walk-in showers, master bath rebuilds, tub-to-shower conversions, and full waterproofing.</p>
+              <a href="bathroom-remodel" class="card-link">See bathroom services <span>→</span></a>
+            </article>
+            <article class="card">
+              <span class="card-tag">Adding Space</span>
+              <h3><a href="home-additions" style="color:inherit">Home Additions</a></h3>
+              <p>Room additions, second-story builds, primary suites, garage conversions — design through finish.</p>
+              <a href="home-additions" class="card-link">See addition services <span>→</span></a>
+            </article>
+            <article class="card">
+              <span class="card-tag">Storm &amp; Replacement</span>
+              <h3><a href="roofing" style="color:inherit">Roofing</a></h3>
+              <p>Roof replacement, repair, and storm-damage work — asphalt shingle, metal, and flat roofs.</p>
+              <a href="roofing" class="card-link">See roofing services <span>→</span></a>
+            </article>
+          </div>
         </div>
       </div>
     </section>
@@ -230,9 +365,11 @@
         <img src="images/veritas-builders-logo.png" alt="Veritas Builders" style="height:34px;width:auto" />
       </a>
       <nav class="footer-links" aria-label="Footer">
-        <a href="#services">Services</a>
-        <a href="#process">Process</a>
-        <a href="#why">Why Us</a>
+        <a href="kitchen-remodel">Kitchen Remodel</a>
+        <a href="bathroom-remodel">Bathroom Remodel</a>
+        <a href="home-additions">Home Additions</a>
+        <a href="roofing">Roofing</a>
+        <a href="blog/">Blog</a>
         <a href="#contact">Contact</a>
         <a href="index.html">Veritas Ventures</a>
       </nav>
