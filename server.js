@@ -59,9 +59,9 @@ app.post('/api/chat', async (req, res) => {
     // Try the configured model first, then fall back through known-good IDs.
     var candidates = [
       process.env.ANTHROPIC_MODEL,
-      'claude-3-5-sonnet-20241022',
-      'claude-3-5-sonnet-20240620',
-      'claude-3-haiku-20240307'
+      'claude-sonnet-4-6',
+      'claude-sonnet-4-5-20250929',
+      'claude-haiku-4-5-20251001'
     ].filter(Boolean);
 
     var resp, lastErr;
