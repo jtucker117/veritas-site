@@ -361,7 +361,7 @@ app.get('/api/health', (req, res) => res.json({ ok: true, ai: HAS_AI, email: HAS
 // Google to transfer any existing PageRank to the new URL and update its
 // index. Drop these once the new domain has ranked for the relevant queries
 // (~6-12 months).
-const BUILDERS_HOME = 'https://veritasbuilderstx.com';
+const BUILDERS_HOME = 'https://www.veritasbuilderstx.com';
 function redirectToBuilders(pathSuffix) {
   return (req, res) => res.redirect(301, BUILDERS_HOME + pathSuffix);
 }
