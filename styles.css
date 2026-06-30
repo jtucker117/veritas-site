@@ -292,6 +292,8 @@ p { text-wrap: pretty; }
   display: flex;
   align-items: center;
   overflow: hidden;
+  /* Breathing room so the big orange logo isn't crammed against the header. */
+  padding-top: clamp(2.5rem, 7vh, 5rem);
 }
 .hero-bg {
   position: absolute;
