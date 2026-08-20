@@ -56,7 +56,9 @@
   <!-- Fonts: Montserrat (Veritas Ventures brand font) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- Accent face: one italic serif word inside the display headline. -->
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
 
   <!-- Favicons -->
   <link rel="icon" href="favicon.ico" sizes="any" />
@@ -76,14 +78,24 @@
         <img src="images/veritas-ventures-logo.png" alt="Veritas Ventures" style="height:42px;width:auto" />
       </a>
 
-      <nav class="nav-links" id="navLinks" aria-label="Primary">
+      <nav class="nav-links" id="navLinks" aria-label="Primary" data-pill>
         <a href="#about">About</a>
         <a href="#companies">Divisions</a>
-        <a href="#areas">Areas We Serve</a>
+        <a href="#areas">Areas</a>
         <a href="#faq">FAQ</a>
-        <a href="#contact">Contact</a>
-        <a href="https://www.veritasbuilderstx.com/" class="btn btn-primary btn-builders">Veritas Builders</a>
+        <a href="https://www.veritasbuilderstx.com/">Builders</a>
       </nav>
+
+      <div class="nav-actions">
+        <a href="#contact" data-magnetic>Contact</a>
+        <a href="#contact" data-magnetic>
+          Request a Consultation
+          <svg viewBox="0 0 26 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+            <path class="arrow-line" d="M0 6h20" />
+            <path d="M18 2l4 4-4 4" />
+          </svg>
+        </a>
+      </div>
 
       <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
@@ -93,34 +105,64 @@
 
   <main>
 
-    <!-- ================= HERO =================
-         EDIT YOUR MAIN HEADLINE + SUBHEADLINE HERE -->
-    <section class="hero">
-      <div class="hero-bg"></div>
-      <div class="hero-grid"></div>
-      <div class="container hero-inner hero-split">
-        <div class="hero-logo-col">
-          <img class="hero-logo" src="images/veritas-ventures-logo.png" alt="Veritas Ventures" />
+    <!-- ================= CINEMATIC HERO =================
+         TO REPLACE THE HERO PHOTO:
+           1. Save a wide shot (2400px+ across, under ~500KB) over
+              images/hero-ventures.jpg
+           2. Re-measure the roofline and update data-occlude-at below
+              (see the note on the <img>) — motion.js uses it to rest
+              the wordmark on the roof line.
+    ============================================================ -->
+    <section class="hero-cine">
+      <div class="hero-cine-media" data-parallax>
+        <!-- data-occlude-at: where the building's roofline sits as a fraction
+             of the image height (measured: 840 / 1632 = 0.515). motion.js uses
+             it to position the wordmark. Re-measure if the photo changes. -->
+        <picture>
+          <img src="images/hero-ventures.jpg"
+               alt="Modern single-story Texas home at dusk under a storm sky, warm interior light through full-height glass"
+               data-occlude-at="0.515"
+               fetchpriority="high" />
+        </picture>
+      </div>
+
+      <div class="container">
+
+        <!-- motion.js lifts this wordmark so it rests just above the
+             building's roofline. See "Wordmark on the roofline". -->
+        <h1 class="cine-title">
+          <span class="cine-title-main">Veritas</span>
+          <span class="cine-title-sub"><span>Ventures</span></span>
+        </h1>
+
+        <div class="cine-card">
+          <div><dt>Headquarters:</dt> <dd>Magnolia, Texas</dd></div>
+          <div><dt>Serving:</dt> <dd>Greater Houston &amp; Montgomery County</dd></div>
+          <div><dt>Divisions:</dt> <dd>Construction · Property · Community</dd></div>
+          <div><dt>Established:</dt> <dd>2025</dd></div>
         </div>
-        <div class="hero-text-col">
-          <span class="eyebrow">Magnolia &amp; Montgomery County, Texas</span>
-          <h1>Building <span class="accent">Trust</span><br />Across <span class="accent">Texas.</span></h1>
-          <p class="hero-lead">
-            Veritas Ventures is a Texas company built on integrity — home to Veritas Builders,
-            our construction and general contracting division serving Greater Houston and Montgomery County,
-            with growing property management and community ventures under one trusted name.
-          </p>
-          <div class="hero-actions">
-            <a href="#companies" class="btn btn-primary">Explore Our Divisions</a>
-            <a href="#contact" class="btn btn-ghost">Request a Consultation</a>
+
+        <div class="cine-foot">
+          <div class="cine-social" aria-label="Veritas on social media">
+            <a href="https://www.instagram.com/veritasbuilderstx" target="_blank" rel="noopener" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.2c3.2 0 3.6 0 4.8.07 1.2.06 1.8.25 2.2.4.6.23 1 .5 1.5 1s.77.9 1 1.5c.15.4.34 1 .4 2.2.07 1.2.07 1.6.07 4.8s0 3.6-.07 4.8c-.06 1.2-.25 1.8-.4 2.2a4 4 0 0 1-1 1.5 4 4 0 0 1-1.5 1c-.4.15-1 .34-2.2.4-1.2.07-1.6.07-4.8.07s-3.6 0-4.8-.07c-1.2-.06-1.8-.25-2.2-.4a4 4 0 0 1-1.5-1 4 4 0 0 1-1-1.5c-.15-.4-.34-1-.4-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.07-4.8c.06-1.2.25-1.8.4-2.2a4 4 0 0 1 1-1.5 4 4 0 0 1 1.5-1c.4-.15 1-.34 2.2-.4C8.4 2.2 8.8 2.2 12 2.2zm0 1.8c-3.1 0-3.5 0-4.7.07-1.1.05-1.7.23-2.1.38a2.2 2.2 0 0 0-.9.6 2.2 2.2 0 0 0-.6.9c-.15.4-.33 1-.38 2.1C3.3 8.5 3.3 8.9 3.3 12s0 3.5.07 4.7c.05 1.1.23 1.7.38 2.1.13.4.3.7.6.9.3.3.6.5.9.6.4.15 1 .33 2.1.38 1.2.07 1.6.07 4.7.07s3.5 0 4.7-.07c1.1-.05 1.7-.23 2.1-.38.4-.13.7-.3.9-.6.3-.3.5-.6.6-.9.15-.4.33-1 .38-2.1.07-1.2.07-1.6.07-4.7s0-3.5-.07-4.7c-.05-1.1-.23-1.7-.38-2.1a2.2 2.2 0 0 0-.6-.9 2.2 2.2 0 0 0-.9-.6c-.4-.15-1-.33-2.1-.38C15.5 4 15.1 4 12 4zm0 3a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 1.8a3.2 3.2 0 1 0 0 6.4 3.2 3.2 0 0 0 0-6.4zm5.2-3a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4z"/></svg>
+            </a>
+            <a href="https://www.facebook.com/VeritasBuildersTX/" target="_blank" rel="noopener" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 21.7v-8h2.7l.4-3.1h-3.1V8.6c0-.9.25-1.5 1.55-1.5H17V4.3c-.3-.04-1.25-.13-2.36-.13-2.34 0-3.94 1.42-3.94 4.04v2.25h-2.7v3.1h2.7v8h2.8z"/></svg>
+            </a>
+            <a href="https://share.google/3ZoTKBIXKHMaNW8Gb" target="_blank" rel="noopener" aria-label="Google">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.35 11.1H12v2.9h5.35a4.5 4.5 0 0 1-1.95 2.95 5.5 5.5 0 0 1-3.4 1.05 5.5 5.5 0 1 1 3.4-9.9l2.05-2.05A8.4 8.4 0 0 0 12 3.6a8.4 8.4 0 1 0 0 16.8c2.34 0 4.3-.78 5.74-2.1a8 8 0 0 0 2.36-6c0-.4 0-.8-.05-1.2h-3.0z"/></svg>
+            </a>
           </div>
 
-          <div class="tagline-strip">
-            <span>Integrity</span> <span class="accent">·</span>
-            <span>Quality</span> <span class="accent">·</span>
-            <span>Local</span> <span class="accent">·</span>
-            <span>Built to Last</span>
-          </div>
+          <p>
+            A Texas company built on integrity — home to Veritas Builders, our construction
+            and general contracting division serving Greater Houston and Montgomery County.
+          </p>
+          <p>
+            Growing property management and community ventures under one trusted name,
+            headquartered in Magnolia, Texas.
+          </p>
         </div>
       </div>
     </section>
@@ -161,7 +203,12 @@
 
         <div class="cards">
           <!-- Veritas Builders — ACTIVE division (links to sub-page) -->
-          <article class="card" style="--card-accent: var(--vb-accent)">
+          <article class="card has-media" style="--card-accent: var(--vb-accent)">
+            <div class="card-media">
+              <img src="images/division-builders.jpg"
+                   alt="Modern Texas Hill Country home at sunset, limestone with a dark standing-seam metal roof"
+                   loading="lazy" />
+            </div>
             <span class="card-tag">Construction &amp; General Contracting</span>
             <h3>Veritas Builders</h3>
             <p>Our flagship division: a general contractor handling residential remodels, commercial build-outs, and full commercial site development &mdash; land clearing, grading, civil utilities, drainage, and pad-site work &mdash; across Greater Houston and Montgomery County, with honest line-item pricing from estimate to handover.</p>
@@ -169,7 +216,12 @@
           </article>
 
           <!-- Property Management — PLANNED -->
-          <article class="card" style="--card-accent: var(--vpm-accent)">
+          <article class="card has-media" style="--card-accent: var(--vpm-accent)">
+            <div class="card-media">
+              <img src="images/division-property.jpg"
+                   alt="Empty double-height great room in a modern Texas home, ready for a new tenant"
+                   loading="lazy" />
+            </div>
             <span class="card-tag">Rental &amp; Investment Property</span>
             <span class="badge-soon">Growing &middot; Coming Soon</span>
             <h3>Veritas Property Management</h3>
@@ -178,7 +230,12 @@
           </article>
 
           <!-- Community / Foundation — PLANNED -->
-          <article class="card" style="--card-accent: var(--vc-accent)">
+          <article class="card has-media" style="--card-accent: var(--vc-accent)">
+            <div class="card-media">
+              <img src="images/division-community.jpg"
+                   alt="A modest Texas home under construction at dusk, timber framing lit warm from within"
+                   loading="lazy" />
+            </div>
             <span class="card-tag">Nonprofit &amp; Giving</span>
             <span class="badge-soon">Planned &middot; Coming Soon</span>
             <h3>Veritas Community</h3>
@@ -186,6 +243,26 @@
             <a href="#contact" class="card-link">Get involved <span>→</span></a>
           </article>
         </div>
+      </div>
+    </section>
+
+    <!-- ================= CINEMATIC STATEMENT BAND =================
+         One photographic moment mid-page so the document does not run
+         flat-dark from the hero to the footer. Reuses the hero image
+         (already cached) behind a heavy scrim. The headline is the
+         site's original tagline, which the new hero displaced.
+    ============================================================ -->
+    <section class="cine-statement">
+      <div class="cine-statement-media" aria-hidden="true">
+        <img src="images/hero-ventures.jpg" alt="" loading="lazy" />
+      </div>
+      <div class="container">
+        <p class="cine-statement-quote">
+          Building trust across <span class="accent-word">Texas.</span>
+        </p>
+        <p class="cine-statement-note">
+          Magnolia, Texas &middot; Serving Greater Houston &amp; Montgomery County
+        </p>
       </div>
     </section>
 
@@ -405,6 +482,7 @@
   </div>
 
   <script src="main.js"></script>
+  <script src="motion.js"></script>
   <script src="map.js"></script>
   <script src="chat.js"></script>
 </body>

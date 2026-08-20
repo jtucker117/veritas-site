@@ -82,8 +82,13 @@
   --space-20: 5rem;
   --space-24: 6rem;
 
-  --radius:    14px;
-  --radius-sm: 8px;
+  --radius:      14px;
+  --radius-sm:   8px;
+  /* Pill/circle radius. Referenced by .badge-soon, .area-list li and
+     .chat-launcher but never defined — so every one of those
+     border-radius declarations was invalid and silently fell back to a
+     square corner. */
+  --radius-full: 999px;
   --content:   1180px;
   --ease:      cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -1000,3 +1005,1044 @@ html.js .reveal.in { opacity: 1; transform: none; }
     border-radius: var(--radius-sm);
   }
 }
+
+/* ============================================================
+   ============================================================
+   2026 REDESIGN LAYER — CINEMATIC DARK
+   ============================================================
+   Veritas Ventures keeps its dark charcoal identity but moves to a
+   cinematic, editorial layout: a full-bleed hero photograph, oversized
+   display type that sits *behind* and around the subject, a floating
+   glass detail card, and a rounded pill navigation.
+
+   Fenced as one block so it can be reverted wholesale (styles.css.bak).
+   ============================================================ */
+
+:root {
+  /* Deeper ground than the old charcoal so photography carries the page. */
+  --vv-ink:      #0C0F13;
+  --vv-graphite: #171C23;
+  --glass:       rgba(255, 255, 255, 0.07);
+  --glass-line:  rgba(255, 255, 255, 0.16);
+
+  --font-display-vv: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
+  /* One accent face, used for a single emphasised word in display headings. */
+  --font-script:     'Instrument Serif', Georgia, 'Times New Roman', serif;
+}
+
+[data-brand="ventures"] {
+  --bg:      var(--vv-ink);
+  --panel:   var(--vv-graphite);
+  --content: 1320px;
+}
+
+/* An italic serif word inside an otherwise geometric headline. Used once
+   or twice per page — it is the whole reason the face is loaded. */
+.script {
+  font-family: var(--font-script);
+  font-style: italic;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: -0.01em;
+}
+
+/* ============================================================
+   HEADER — pill rail, centred logo, action cluster
+   ============================================================ */
+[data-brand="ventures"] .site-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  background: transparent;
+  backdrop-filter: none;
+  border-bottom: none;
+  transition: background 0.4s var(--ease), backdrop-filter 0.4s var(--ease), border-color 0.4s var(--ease);
+}
+/* Only once you leave the hero does the bar acquire a surface. */
+[data-brand="ventures"] .site-header.scrolled {
+  background: color-mix(in srgb, var(--vv-ink) 78%, transparent);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--border-soft);
+  box-shadow: none;
+}
+[data-brand="ventures"] .nav {
+  height: 92px;
+  justify-content: space-between;
+  gap: var(--space-6);
+}
+
+/* The rounded outline buttons from the reference. */
+[data-brand="ventures"] .nav-links { gap: var(--space-2); position: relative; }
+[data-brand="ventures"] .nav-links a {
+  position: relative;
+  z-index: 1;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.78);
+  padding: 0.72rem 1.25rem;
+  border: 1px solid var(--glass-line);
+  border-radius: 999px;
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  white-space: nowrap;
+  transition: color 0.25s var(--ease), border-color 0.25s var(--ease), background 0.25s var(--ease);
+}
+[data-brand="ventures"] .nav-links a:hover {
+  color: var(--white);
+  border-color: rgba(255, 255, 255, 0.42);
+}
+/* Filled state for the section you are currently looking at. */
+[data-brand="ventures"] .nav-links a.is-active {
+  background: var(--white);
+  border-color: var(--white);
+  color: var(--vv-ink);
+}
+/* This site fills the pills themselves, so the shared sliding element
+   from motion.js is suppressed rather than removed. */
+[data-brand="ventures"] .nav-pill { display: none; }
+
+/* Right-hand cluster: plain CONTACT link + arrow CTA. */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+.nav-actions a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.86);
+  transition: color 0.25s var(--ease);
+}
+.nav-actions a:hover { color: var(--accent); }
+.nav-actions svg { width: 26px; height: 12px; }
+/* The arrow extends on hover — small, cheap, and reads as "go". */
+.nav-actions .arrow-line { transition: transform 0.35s var(--ease); transform-origin: left center; }
+.nav-actions a:hover .arrow-line { transform: scaleX(1.35); }
+
+/* Reference order: pill rail left, logo centred, action cluster right.
+   Giving the two outer groups equal flex is what actually centres the
+   logo — margin:auto alone just shoves it against the wider neighbour. */
+[data-brand="ventures"] .nav-links  { order: 1; flex: 1 1 0; justify-content: flex-start; }
+[data-brand="ventures"] .site-header .logo { order: 2; flex: 0 0 auto; }
+[data-brand="ventures"] .nav-actions { order: 3; flex: 1 1 0; justify-content: flex-end; }
+[data-brand="ventures"] .nav-toggle { order: 4; }
+
+/* ============================================================
+   CINEMATIC HERO
+   ============================================================ */
+.hero-cine {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  /* Top padding clears the fixed header — without it the meta rail slides
+     underneath the nav on short viewports. */
+  padding-top: 116px;
+  padding-bottom: clamp(var(--space-10), 5vw, var(--space-20));
+  background: var(--vv-ink);
+}
+/* ---- Scroll expand ------------------------------------------
+   The plate starts inset with rounded corners and grows to full
+   bleed as you scroll the first part of the hero. motion.js drives
+   --expand from 0 to 1; the default of 1 here means no-JS and
+   reduced-motion users simply get the finished full-bleed state. */
+.hero-cine-media {
+  --expand: 1;
+  --inset-x: calc((1 - var(--expand)) * clamp(12px, 3.2vw, 44px));
+  --inset-y: calc((1 - var(--expand)) * clamp(14px, 3.4vw, 52px));
+  position: absolute;
+  top: var(--inset-y);
+  bottom: var(--inset-y);
+  left: var(--inset-x);
+  right: var(--inset-x);
+  z-index: 0;
+  border-radius: calc((1 - var(--expand)) * 26px);
+  overflow: hidden;
+  /* Nudged onto its own layer so resizing the plate every frame does not
+     repaint the sections underneath it. */
+  will-change: top, bottom, left, right;
+}
+/* <picture> is display:inline with no intrinsic size, so an <img> inside it
+   cannot resolve height:100% against the plate — it collapsed to its natural
+   aspect and left a hard seam across the hero. display:contents removes the
+   picture box entirely so the img sizes against .hero-cine-media directly. */
+.hero-cine-media picture { display: contents; }
+
+.hero-cine-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Overscan for the cursor parallax. Kept as small as the travel allows —
+     every extra percent is resolution the source file has to pay for.
+     motion.js READS this value, so the two can never disagree. */
+  --parallax-scale: 1.04;
+  transform: scale(var(--parallax-scale));
+  will-change: transform;
+}
+/* Placeholder shown until real Ventures photography is dropped in.
+   Remove the .is-empty class once an <img> is present. */
+.hero-cine-media.is-empty {
+  background:
+    radial-gradient(120% 90% at 70% 18%, #2A323C 0%, #161B22 48%, #0C0F13 100%);
+}
+.hero-cine-media.is-empty::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+  background-size: 90px 90px;
+  mask-image: radial-gradient(ellipse 80% 70% at 60% 40%, #000 20%, transparent 78%);
+}
+.hero-cine-media.is-empty::after {
+  content: "HERO PHOTOGRAPHY — DROP A 2400px WIDE IMAGE HERE";
+  position: absolute;
+  left: 50%; top: 16%;
+  transform: translateX(-50%);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  color: rgba(255,255,255,0.22);
+  white-space: nowrap;
+}
+/* Two gradient scrims: one anchors the headline, one protects the nav.
+   They live on .hero-cine-media rather than .hero-cine so the scroll-expand
+   inset and corner radius clip the photograph and its scrims together as a
+   single plate — otherwise the scrims would square off the rounded corners
+   and bleed past the inset edge. */
+.hero-cine-media::before,
+.hero-cine-media::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+.hero-cine-media::before {
+  top: 0; height: 42%;
+  background: linear-gradient(to bottom, rgba(6,9,12,0.72), transparent);
+}
+.hero-cine-media::after {
+  bottom: 0; height: 68%;
+  background: linear-gradient(to top, rgba(6,9,12,0.92) 8%, rgba(6,9,12,0.45) 46%, transparent);
+}
+.hero-cine .container { position: relative; z-index: 2; width: 100%; }
+
+/* The oversized wordmark headline. */
+/* The hero lockup is a scaled-up rendition of the actual logo: VERITAS in
+   a LIGHT weight with very wide tracking, and VENTURES beneath it in small
+   letterspaced orange caps flanked by rules. The previous version used
+   Montserrat 800 at negative tracking — the exact inverse of the mark, so
+   the biggest word on the site contradicted the logo directly above it.
+
+   Tracking adds a lot of width, so the size is capped lower than before to
+   keep the wordmark on one line. */
+.cine-title {
+  /* Shrink-wrap to the width of VERITAS. That width is what the VENTURES
+     lockup right-aligns against, so it lands under the final S. */
+  display: inline-block;
+  font-family: var(--font-display-vv);
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+  font-size: clamp(3rem, 1rem + 9.5vw, 8.5rem);
+  color: #F3EFE7;
+  margin: 0;
+  text-wrap: nowrap;
+}
+.cine-title-main { display: block; }
+
+/* VENTURES: small orange caps between two rules, straight off the logo. */
+/* VENTURES: the same face at its thinnest weight, widely letterspaced and
+   right-aligned so it sits under the final S of VERITAS. Same family, so
+   the lockup reads as one mark rather than two typefaces bolted together —
+   the weight contrast does the work, exactly as it does in the logo. */
+.cine-title-sub {
+  display: block;
+  text-align: right;
+  margin-top: clamp(0.3rem, 0.8vw, 0.75rem);
+  font-weight: 200;
+  font-size: clamp(0.66rem, 0.3rem + 1vw, 1.5rem);
+  letter-spacing: 0.46em;
+  color: #F3EFE7;
+  text-transform: uppercase;
+}
+/* Wide tracking leaves a trailing space after the final glyph; pull it in
+   so the word ends flush with the S rather than drifting past it. */
+.cine-title-sub span { margin-right: -0.46em; }
+/* ---- Wordmark resting on the roofline ------------------------
+   The wordmark sits fully visible with its baseline just above the
+   building's roof, so it reads as standing ON the roofline.
+
+   An earlier version masked the text at the roofline to fake the
+   wordmark passing BEHIND the building. That was abandoned: the hero
+   image drifts under the cursor parallax, so the roofline moves while
+   a CSS mask stays put — the cut visibly slid off the roof edge. A
+   resting gap that breathes by a few pixels is invisible; a sliding
+   cut line is not.
+
+   --title-lift pushes the wordmark up off the bottom-anchored stack
+   (the stack grows upward, so the card and footer below do not move).
+   motion.js solves it per viewport; the value here is the no-JS
+   fallback. Re-tune if the hero photograph is ever replaced. */
+.cine-title {
+  --title-lift: clamp(70px, 13vh, 165px);
+  margin-bottom: var(--title-lift);
+}
+.cine-title-main { display: block; }
+
+.cine-title .script {
+  display: block;
+  text-align: right;
+  font-size: 0.46em;
+  line-height: 0.9;
+  letter-spacing: 0;
+  margin-top: -0.12em;
+  color: #F3EFE7;
+}
+
+/* Frosted detail card floating over the image. */
+.cine-card {
+  background: rgba(18, 22, 28, 0.52);
+  border: 1px solid var(--glass-line);
+  border-radius: 14px;
+  backdrop-filter: blur(16px);
+  padding: var(--space-6);
+  max-width: 420px;
+  font-size: 0.86rem;
+  line-height: 1.85;
+  color: rgba(255,255,255,0.82);
+}
+.cine-card dt { display: inline; color: rgba(255,255,255,0.55); }
+.cine-card dd { display: inline; margin: 0; color: var(--white); font-weight: 600; }
+.cine-card div + div { margin-top: 2px; }
+
+/* Bottom row — social icons left, two columns of copy right. */
+.cine-foot {
+  display: grid;
+  grid-template-columns: auto 1fr 1fr;
+  gap: clamp(var(--space-6), 4vw, var(--space-16));
+  align-items: end;
+  margin-top: var(--space-10);
+}
+.cine-foot p {
+  font-size: 0.82rem;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.72);
+  margin: 0;
+}
+.cine-social { display: flex; gap: var(--space-3); }
+.cine-social a {
+  width: 40px; height: 40px;
+  display: grid; place-items: center;
+  border: 1px solid var(--glass-line);
+  border-radius: 10px;
+  background: var(--glass);
+  color: rgba(255,255,255,0.82);
+  transition: background 0.25s var(--ease), color 0.25s var(--ease), transform 0.25s var(--ease);
+}
+.cine-social a:hover { background: var(--accent); color: var(--white); transform: translateY(-2px); }
+.cine-social svg { width: 17px; height: 17px; fill: currentColor; }
+
+
+/* ============================================================
+   SECTION POLISH — softer, more editorial than the old build
+   ============================================================ */
+[data-brand="ventures"] .section-title {
+  font-size: clamp(1.7rem, 1rem + 2.4vw, 3.1rem);
+  letter-spacing: -0.025em;
+  line-height: 1.04;
+}
+[data-brand="ventures"] .card,
+[data-brand="ventures"] .stat-card,
+[data-brand="ventures"] .cta-box,
+[data-brand="ventures"] .faq-item {
+  background: var(--glass);
+  border: 1px solid var(--border-soft);
+  border-radius: 16px;
+  backdrop-filter: blur(8px);
+}
+[data-brand="ventures"] .card:hover {
+  border-color: var(--glass-line);
+  background: rgba(255,255,255,0.10);
+}
+[data-brand="ventures"] .values {
+  background: linear-gradient(180deg, var(--vv-graphite), var(--vv-ink));
+  border-block-color: var(--border-soft);
+}
+[data-brand="ventures"] .btn { border-radius: 999px; padding: 0.85rem 1.6rem; }
+[data-brand="ventures"] .btn-primary { box-shadow: none; }
+[data-brand="ventures"] .value .v-icon { border-radius: 12px; }
+
+/* ============================================================
+   CUSTOM CURSOR (shared contract with motion.js)
+   ============================================================ */
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  top: 0; left: 0;
+  z-index: 9999;
+  pointer-events: none;
+  border-radius: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  will-change: transform;
+}
+.cursor-dot { width: 6px; height: 6px; background: var(--accent); }
+.cursor-ring {
+  width: 34px; height: 34px;
+  border: 1px solid rgba(255,255,255,0.55);
+  transition: width 0.25s var(--ease), height 0.25s var(--ease),
+              background 0.25s var(--ease), border-color 0.25s var(--ease);
+}
+.cursor-ring.is-hover {
+  width: 56px; height: 56px;
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+}
+.cursor-ring.is-down { width: 26px; height: 26px; }
+
+@media (pointer: fine) {
+  html.has-cursor,
+  html.has-cursor a,
+  html.has-cursor button,
+  html.has-cursor summary,
+  html.has-cursor [role="button"] { cursor: none; }
+  html.has-cursor input,
+  html.has-cursor textarea { cursor: text; }
+}
+@media (pointer: coarse) { .cursor-dot, .cursor-ring { display: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .cursor-dot, .cursor-ring { display: none; }
+  html.has-cursor, html.has-cursor a, html.has-cursor button { cursor: auto; }
+}
+
+/* Staggered reveal groups (shared contract with motion.js). */
+html.js .reveal-group > * {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+html.js .reveal-group.in > * { opacity: 1; transform: none; }
+
+/* ============================================================
+   RESPONSIVE — redesign components
+   ============================================================ */
+@media (max-width: 1100px) {
+  .cine-title { text-wrap: wrap; }
+  .cine-foot { grid-template-columns: 1fr; gap: var(--space-6); }
+}
+
+@media (max-width: 860px) {
+  [data-brand="ventures"] .site-header .logo { margin-inline: 0; }
+  [data-brand="ventures"] .nav { height: 68px; }
+  [data-brand="ventures"] .nav-links {
+    /* The desktop rule sets position:relative (to anchor the sliding pill)
+       outside any media query, which overrode the base mobile dropdown's
+       position:fixed — the panel fell back into flow as a flex child of the
+       header, so it rendered half-width and tucked under the logo. Restore
+       the fixed dropdown, and undo the desktop flex sizing with it. */
+    position: fixed;
+    inset: 68px 0 auto 0;
+    flex: 0 0 auto;
+    order: 0;
+    width: auto;
+    background: color-mix(in srgb, var(--vv-ink) 96%, transparent);
+    backdrop-filter: blur(18px);
+  }
+  [data-brand="ventures"] .nav-links a {
+    width: 100%;
+    border-radius: 12px;
+    padding: 0.8rem 1rem;
+  }
+  .nav-actions { display: none; }
+
+  .hero-cine { min-height: 92svh; padding-bottom: var(--space-8); }
+  .cine-title { font-size: clamp(2.6rem, 1rem + 11vw, 5rem); margin-bottom: var(--space-4); }
+  .cine-title .script { text-align: left; }
+  
+/* ============================================================
+   ============================================================
+   CINEMATIC PASS — BELOW THE HERO
+   ============================================================
+   The hero established a language: oversized uppercase display type,
+   one italic serif accent, mono micro-labels, glass panels, and a lot
+   of air. Everything below it was still generic dark cards with
+   sentence-case headings, so the page fell apart after the first
+   screen.
+
+   This carries that language through the whole document. It is almost
+   entirely restyling of EXISTING classes (.eyebrow, .section-title,
+   .card, .faq-item, .cta-box) rather than new markup, so it applies to
+   every section at once and to any section added later.
+   ============================================================ */
+
+/* ---- Section rhythm ----------------------------------------
+   A hairline at the top of each section gives the page a measured
+   beat instead of undifferentiated blocks of dark. */
+[data-brand="ventures"] .section + .section { border-top: 1px solid var(--border-soft); }
+[data-brand="ventures"] .section {
+  padding-block: clamp(var(--space-16), 11vw, 9rem);
+}
+
+/* ---- Eyebrow → mono index label ----------------------------- */
+[data-brand="ventures"] .eyebrow {
+  font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: 0.24em;
+  color: rgba(255, 255, 255, 0.55);
+  margin-bottom: var(--space-6);
+}
+[data-brand="ventures"] .eyebrow::before {
+  width: 40px;
+  height: 1px;
+  background: var(--accent);
+}
+
+/* ---- Section titles → editorial display --------------------
+   Same face and treatment as the hero wordmark, two steps smaller. */
+/* Section titles sit one step down from the wordmark: still light and
+   letterspaced so they belong to the mark, but tighter and a touch heavier
+   than the hero so they stay readable at body-adjacent sizes. */
+[data-brand="ventures"] .section-title,
+[data-brand="ventures"] .cta h2 {
+  font-family: var(--font-display-vv);
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: clamp(1.9rem, 1rem + 3.1vw, 4rem);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  max-width: 20ch;
+}
+/* The italic serif accent, available in any heading. */
+[data-brand="ventures"] .section-title .script,
+[data-brand="ventures"] .cta h2 .script {
+  font-size: 1.02em;
+  letter-spacing: -0.01em;
+}
+[data-brand="ventures"] .section-lead {
+  font-size: 1.02rem;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.66);
+  max-width: 54ch;
+}
+
+/* ---- Cards → real glass -------------------------------------
+   The earlier pass set a glass background but kept the flat border and
+   hard top rule, so they still read as plain boxes. */
+[data-brand="ventures"] .card {
+  position: relative;
+  padding: var(--space-10) var(--space-8) var(--space-8);
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 18px;
+  backdrop-filter: blur(14px);
+  overflow: hidden;
+  transition: transform 0.45s var(--ease), background 0.45s var(--ease),
+              border-color 0.45s var(--ease);
+}
+/* Top rule becomes a soft gradient that fades out, not a hard bar. */
+[data-brand="ventures"] .card::after {
+  height: 1px;
+  background: linear-gradient(90deg,
+    var(--card-accent, var(--accent)) 0%,
+    color-mix(in srgb, var(--card-accent, var(--accent)) 30%, transparent) 45%,
+    transparent 100%);
+}
+[data-brand="ventures"] .card:hover {
+  transform: translateY(-6px);
+  background: rgba(255, 255, 255, 0.075);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+[data-brand="ventures"] .card h3 {
+  font-family: var(--font-display-vv);
+  font-weight: 700;
+  font-size: 1.22rem;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-4);
+}
+[data-brand="ventures"] .card .card-tag {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  color: rgba(255, 255, 255, 0.45);
+}
+[data-brand="ventures"] .card .card-link {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* Stat cards + values band pick up the same glass. */
+[data-brand="ventures"] .stat-card {
+  padding: var(--space-8);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+[data-brand="ventures"] .stat-card .num {
+  font-family: var(--font-display-vv);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+[data-brand="ventures"] .value .v-icon {
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  color: var(--accent);
+}
+[data-brand="ventures"] .value h4 {
+  font-family: var(--font-display-vv);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  font-size: 1.05rem;
+}
+
+/* ============================================================
+   CINEMATIC STATEMENT BAND
+   ============================================================
+   One full-bleed photographic moment mid-page so the document does not
+   run flat-dark from the hero all the way to the footer. Reuses the
+   hero photograph (already cached — costs no extra bytes) pushed far
+   back behind a heavy scrim.
+   ============================================================ */
+.cine-statement {
+  position: relative;
+  overflow: hidden;
+  padding-block: clamp(var(--space-20), 13vw, 10rem);
+  background: var(--vv-ink);
+}
+.cine-statement-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.cine-statement-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.32;
+  transform: scale(1.05);
+}
+/* Scrim so the type always wins, whatever the photograph is doing. */
+.cine-statement::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(90deg,
+    rgba(8, 11, 15, 0.94) 0%,
+    rgba(8, 11, 15, 0.78) 45%,
+    rgba(8, 11, 15, 0.35) 100%);
+}
+.cine-statement .container { position: relative; z-index: 2; }
+.cine-statement-quote {
+  font-family: var(--font-display-vv);
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: clamp(2rem, 1rem + 4.2vw, 5.2rem);
+  line-height: 0.96;
+  letter-spacing: -0.04em;
+  color: #F3EFE7;
+  max-width: 16ch;
+  margin: 0;
+}
+.cine-statement-quote .script { text-transform: none; }
+.cine-statement-note {
+  margin-top: var(--space-8);
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* ============================================================
+   FAQ → hairline rows
+   ============================================================ */
+[data-brand="ventures"] .faq-item {
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--border-soft);
+  border-radius: 0;
+  backdrop-filter: none;
+}
+[data-brand="ventures"] .faq-item summary {
+  font-family: var(--font-display-vv);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: -0.015em;
+  padding: var(--space-6) 0;
+}
+[data-brand="ventures"] .faq-item summary::after { color: var(--accent); }
+[data-brand="ventures"] .faq-item p {
+  padding: 0 0 var(--space-6);
+  color: rgba(255, 255, 255, 0.66);
+  max-width: 62ch;
+}
+
+/* ============================================================
+   CLOSING CTA → full-bleed panel
+   ============================================================ */
+[data-brand="ventures"] .cta-box {
+  background: linear-gradient(140deg,
+    rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 22px;
+  backdrop-filter: blur(14px);
+  padding: clamp(var(--space-12), 8vw, 7rem) var(--space-8);
+}
+[data-brand="ventures"] .cta h2 { margin-inline: auto; }
+[data-brand="ventures"] .contact-meta {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+[data-brand="ventures"] .site-footer {
+  border-top: 1px solid var(--border-soft);
+  padding-block: var(--space-16);
+}
+[data-brand="ventures"] .footer-links a,
+[data-brand="ventures"] .footer-copy {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+[data-brand="ventures"] .footer-social a {
+  border-radius: 10px;
+  background: var(--glass);
+  border-color: var(--glass-line);
+}
+
+/* ============================================================
+   CHAT WIDGET — glass, to match everything else
+   ============================================================
+   Was an opaque slab with a saturated orange gradient header: the one
+   element on the page still speaking the old visual language. Now it
+   is the same frosted panel as the hero card, with the brand colour
+   reduced to a status dot and the send button.
+   ============================================================ */
+[data-brand="ventures"] .chat-panel {
+  background: rgba(16, 20, 26, 0.78);
+  border: 1px solid var(--glass-line);
+  border-radius: 18px;
+  backdrop-filter: blur(22px);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55);
+  overflow: hidden;
+}
+[data-brand="ventures"] .chat-head {
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--border-soft);
+  padding: var(--space-6);
+}
+[data-brand="ventures"] .chat-head h4 {
+  font-family: var(--font-display-vv);
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+/* Live dot carries the brand colour instead of a full orange header. */
+[data-brand="ventures"] .chat-head h4::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+  flex: none;
+}
+[data-brand="ventures"] .chat-head p {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.6);
+  opacity: 1;
+}
+[data-brand="ventures"] .chat-msg {
+  border-radius: 14px;
+  font-size: 0.86rem;
+  line-height: 1.6;
+}
+[data-brand="ventures"] .chat-msg.bot {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.9);
+}
+[data-brand="ventures"] .chat-inputbar {
+  border-top: 1px solid var(--border-soft);
+  background: rgba(255, 255, 255, 0.02);
+}
+[data-brand="ventures"] .chat-inputbar textarea {
+  background: transparent;
+  font-size: 0.86rem;
+}
+[data-brand="ventures"] .chat-inputbar button { border-radius: 10px; }
+[data-brand="ventures"] .chat-disclaimer {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.38);
+}
+/* Launcher: keep it findable, but calmer than a flat orange disc. */
+[data-brand="ventures"] .chat-launcher {
+  background: var(--accent);
+  box-shadow: 0 12px 34px color-mix(in srgb, var(--accent) 38%, transparent);
+}
+[data-brand="ventures"] .chat-launcher:hover {
+  transform: translateY(-3px) scale(1.03);
+  background: var(--accent-hover);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 860px) {
+  [data-brand="ventures"] .section-title,
+  [data-brand="ventures"] .cta h2 { max-width: none; }
+  .cine-statement-quote { max-width: none; }
+  .cine-statement::after {
+    background: linear-gradient(180deg,
+      rgba(8, 11, 15, 0.86) 0%, rgba(8, 11, 15, 0.94) 100%);
+  }
+}
+
+/* ---- Brand accent word --------------------------------------
+   One word picked out in the mark's orange, echoing the VENTURES
+   line in the logo. Replaces the italic serif accent, which no
+   longer belonged once the display type matched the letterspaced
+   light wordmark. */
+.accent-word { color: var(--accent); }
+
+/* ---- Remaining headings brought onto the mark ---------------- */
+[data-brand="ventures"] .card h3,
+[data-brand="ventures"] .value h4,
+[data-brand="ventures"] .faq-item summary,
+[data-brand="ventures"] .chat-head h4 {
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+[data-brand="ventures"] .card h3 { font-size: 0.98rem; line-height: 1.4; }
+[data-brand="ventures"] .value h4 { font-size: 0.9rem; }
+[data-brand="ventures"] .faq-item summary { font-size: 0.88rem; }
+[data-brand="ventures"] .chat-head h4 { font-size: 0.8rem; }
+[data-brand="ventures"] .stat-card .num {
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 1.5rem;
+}
+/* Buttons follow the same letterspaced-caps logic. */
+[data-brand="ventures"] .btn {
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.72rem;
+}
+
+/* ============================================================
+   DIVISION CARD MEDIA
+   ============================================================
+   Opt-in photograph at the head of a division card. Add
+   class="card has-media" and drop a .card-media block in as the
+   card's first child — cards without one are unchanged, so the
+   three divisions can gain images one at a time.
+   ============================================================ */
+[data-brand="ventures"] .card.has-media { padding-top: 0; }
+[data-brand="ventures"] .card-media {
+  position: relative;
+  /* Bleed to the card edges by negating its horizontal padding. */
+  margin: 0 calc(-1 * var(--space-8)) var(--space-8);
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--vv-graphite);
+}
+[data-brand="ventures"] .card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.7s var(--ease);
+}
+[data-brand="ventures"] .card:hover .card-media img { transform: scale(1.05); }
+/* Fade the base of the photo into the card so the tag and heading
+   underneath stay dominant rather than competing with the image. */
+[data-brand="ventures"] .card-media::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 60%;
+  background: linear-gradient(to top, var(--vv-ink) 4%, rgba(12, 15, 19, 0) 100%);
+  pointer-events: none;
+}
+
+/* ============================================================
+   SCROLL RHYTHM
+   ============================================================
+   The page ran 7.5 screens with eight consecutive sections at the
+   same width, same left alignment and the same vertical padding —
+   which is what made it feel like an endless scroll rather than a
+   sequence of ideas.
+
+   Three changes, none of which touch the copy:
+     1. tighter vertical padding
+     2. a two-column split for the list sections, so the heading
+        pins on the left while its content scrolls past
+     3. the service map capped — it was the tallest block on the page
+   ============================================================ */
+[data-brand="ventures"] .section {
+  padding-block: clamp(var(--space-12), 7vw, 5.5rem);
+}
+
+/* ---- Split layout: sticky heading left, content right -------- */
+[data-brand="ventures"] #values > .container,
+[data-brand="ventures"] #faq > .container {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.8fr) 1.6fr;
+  gap: clamp(var(--space-8), 5vw, var(--space-20));
+  align-items: start;
+}
+/* The eyebrow + heading form the pinned column. */
+[data-brand="ventures"] #values > .container > .eyebrow,
+[data-brand="ventures"] #faq > .container > .eyebrow {
+  grid-column: 1;
+  grid-row: 1;
+  position: sticky;
+  top: 128px;
+}
+[data-brand="ventures"] #values > .container > .section-title,
+[data-brand="ventures"] #faq > .container > .section-title {
+  grid-column: 1;
+  grid-row: 2;
+  position: sticky;
+  top: 168px;
+  margin-bottom: 0 !important;
+}
+[data-brand="ventures"] #values .values-grid,
+[data-brand="ventures"] #faq .faq-list {
+  grid-column: 2;
+  grid-row: 1 / -1;
+}
+/* Five values across a narrower column would be unreadable slivers. */
+[data-brand="ventures"] #values .values-grid {
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: var(--space-10) var(--space-8);
+}
+
+/* ---- Service map: was the tallest block on the page ---------- */
+[data-brand="ventures"] #areas #tx-map {
+  max-height: 380px;
+  width: auto;
+  margin-inline: auto;
+}
+[data-brand="ventures"] #areas .map-wrap {
+  padding: clamp(var(--space-6), 3vw, var(--space-10));
+}
+
+@media (max-width: 900px) {
+  [data-brand="ventures"] #values > .container,
+  [data-brand="ventures"] #faq > .container { grid-template-columns: 1fr; }
+  [data-brand="ventures"] #values > .container > .eyebrow,
+  [data-brand="ventures"] #faq > .container > .eyebrow,
+  [data-brand="ventures"] #values > .container > .section-title,
+  [data-brand="ventures"] #faq > .container > .section-title {
+    position: static;
+    grid-column: 1;
+  }
+  [data-brand="ventures"] #values .values-grid,
+  [data-brand="ventures"] #faq .faq-list { grid-column: 1; grid-row: auto; }
+}
+
+/* ---- Hero on phones -----------------------------------------
+   The values rail was rendering at desktop size in a narrow column,
+   reading as a stray bulleted list rather than a quiet caption. */
+@media (max-width: 700px) {
+  
+/* ============================================================
+   HERO ON PORTRAIT VIEWPORTS
+   ============================================================
+   object-fit:cover in a taller-than-wide box always crops a 16:9
+   photograph — at phone proportions it showed roughly a quarter of the
+   frame, which read as an anonymous slice of lit glass rather than a
+   house. No amount of re-cropping fixes that; the geometry does it.
+
+   So on portrait the plate stops filling the viewport and instead sits
+   at the photograph's own aspect ratio, showing the building whole,
+   with the hero copy stacked underneath it on solid ground.
+   ============================================================ */
+@media (max-aspect-ratio: 1/1) {
+  .hero-cine {
+    display: block;
+    min-height: 0;
+    padding-top: 0;
+    padding-bottom: clamp(var(--space-10), 7vw, var(--space-16));
+  }
+
+  .hero-cine-media {
+    position: relative;
+    top: auto; bottom: auto; left: auto; right: auto;
+    /* 3:2 rather than the file's native 1.78:1. That trims ~16% off the
+       sides — the house is centred and survives intact, only the edge
+       trees are clipped — and buys ~55px of extra height, which is the
+       grass the wordmark needs to sit in. */
+    aspect-ratio: 3 / 2;
+    margin-top: 68px;          /* clears the fixed header */
+    border-radius: 0;
+    will-change: auto;
+  }
+
+  /* The top scrim existed to protect the nav from a full-bleed photo.
+     The nav now sits above the plate on solid ground, so it is dead
+     weight — and it was dimming the sky for no reason. */
+  .hero-cine-media::before { display: none; }
+
+  /* Fade the base of the photo into the copy below it. */
+  .hero-cine-media::after {
+    height: 34%;
+    background: linear-gradient(to top, var(--vv-ink), transparent);
+  }
+
+  /* Copy sits below the plate rather than over it. */
+  .hero-cine .container {
+    padding-top: var(--space-8);
+  }
+  
+/* ---- Portrait: wordmark sits on the grass --------------------
+   The lockup is lifted out of the stack and pulled up over the base
+   of the photograph, so it reads as sitting in the grass rather than
+   floating on the dark ground below. The plate's bottom scrim already
+   darkens that band, so the type stays legible without a shadow. */
+@media (max-aspect-ratio: 1/1) {
+  .hero-cine .container {
+    display: flex;
+    flex-direction: column;
+    padding-top: 0;
+  }
+  .cine-title {
+    order: -1;                                   /* above the values rail */
+    margin-top: calc(-1 * clamp(74px, 19vw, 116px));
+    margin-bottom: var(--space-8);
+  }
+  /* Deepen the fade so the grass under the wordmark reads darker. */
+  .hero-cine-media::after { height: 46%; }
+  
