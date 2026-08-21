@@ -292,12 +292,54 @@
         mx = e.clientX; my = e.clientY;
       }, { passive: true });
 
+      /* ---- Keep the cursor visible on any surface --------------
+         The cursor is drawn in the brand accent, which disappears the
+         moment it crosses an accent-filled block (the featured matrix
+         cell, the hero block, the stat tiles). Rather than blend-mode
+         it — which throws the hue around unpredictably — sample the
+         surface underneath and flip the cursor to white over anything
+         dark. The accent counts as dark: #0066FF sits at luminance 60
+         on a 0-255 scale, well under the 140 threshold. */
+      var onDark = false, sampleTick = 0;
+
+      function surfaceLuma(x, y) {
+        // Both cursor layers are pointer-events:none, so they are never
+        // returned here and cannot sample themselves.
+        var el = document.elementFromPoint(x, y);
+        while (el && el !== document.documentElement) {
+          var bg = getComputedStyle(el).backgroundColor;
+          var m = bg && bg.match(/rgba?\(([^)]+)\)/);
+          if (m) {
+            var p = m[1].split(',').map(parseFloat);
+            var a = p.length > 3 ? p[3] : 1;
+            if (a > 0.55) return 0.2126 * p[0] + 0.7152 * p[1] + 0.0722 * p[2];
+          }
+          el = el.parentElement;
+        }
+        return null;
+      }
+
+      function sampleSurface() {
+        if (mx < 0) return;
+        var l = surfaceLuma(mx, my);
+        if (l === null) return;
+        var dark = l < 140;
+        if (dark !== onDark) {
+          onDark = dark;
+          dot.classList.toggle('on-dark', dark);
+          ring.classList.toggle('on-dark', dark);
+        }
+      }
+
       (function loop() {
         // Dot is 1:1; the ring trails at 18% per frame for the lag.
         dot.style.transform = 'translate3d(' + mx + 'px,' + my + 'px,0) translate(-50%,-50%)';
         rx += (mx - rx) * 0.18;
         ry += (my - ry) * 0.18;
         ring.style.transform = 'translate3d(' + rx + 'px,' + ry + 'px,0) translate(-50%,-50%)';
+        // Surface sampling walks the DOM and reads computed styles, so it
+        // runs at ~10Hz rather than every frame.
+        if (++sampleTick % 6 === 0) sampleSurface();
         requestAnimationFrame(loop);
       })();
 

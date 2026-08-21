@@ -1411,6 +1411,17 @@ html.js .reveal.in { opacity: 1; transform: none; }
 }
 .cursor-ring.is-down { width: 26px; height: 26px; }
 
+/* Over a dark or accent-filled surface the accent-coloured cursor
+   disappears — most visibly on the blue/orange blocks. motion.js samples
+   the surface luminance under the pointer and adds .on-dark, flipping
+   both layers to white. */
+.cursor-dot.on-dark { background: #FFFFFF; }
+.cursor-ring.on-dark { border-color: rgba(255, 255, 255, 0.85); }
+.cursor-ring.on-dark.is-hover {
+  border-color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.16);
+}
+
 @media (pointer: fine) {
   html.has-cursor,
   html.has-cursor a,
