@@ -704,65 +704,67 @@ p { text-wrap: pretty; }
 .back-link:hover { color: var(--accent); }
 
 /* ============================================================
-   TEXAS SERVICE-AREA MAP
-   ============================================================ */
+   NATIONAL FOOTPRINT MAP
+   ============================================================
+   Was a Texas-only outline with a Dallas-Austin-Houston triangle,
+   which contradicted the "working in six states" headline sitting
+   next to it. Now the lower 48, with the worked states filled. */
 .map-wrap {
   background: color-mix(in srgb, var(--bg) 55%, #000);
   border: 1px solid var(--border-soft);
   border-radius: var(--radius);
   padding: clamp(var(--space-6), 4vw, var(--space-12));
 }
-#tx-map {
+#us-map {
   width: 100%;
-  max-width: 520px;
   height: auto;
   margin: 0 auto;
   display: block;
-  overflow: hidden;
+  overflow: visible;
 }
-.tx-outline {
+.us-state {
   fill: color-mix(in srgb, var(--panel) 80%, var(--bg));
   stroke: var(--border-mid);
-  stroke-width: 2.5;
+  stroke-width: 1;
   stroke-linejoin: round;
+  transition: fill 0.4s ease;
 }
-.tx-triangle {
-  fill: color-mix(in srgb, var(--accent) 18%, transparent);
-  stroke: color-mix(in srgb, var(--accent) 55%, transparent);
-  stroke-width: 2;
-  stroke-dasharray: 8 6;
+.us-state--worked {
+  fill: color-mix(in srgb, var(--accent) 62%, var(--bg));
+  stroke: var(--accent);
+  stroke-width: 1.2;
 }
-.tx-city { fill: var(--white); stroke: var(--accent); stroke-width: 3; }
-.tx-city--faint { fill: var(--text-faint); stroke: var(--border-mid); }
-.tx-label {
-  fill: var(--white);
+.us-label {
+  fill: var(--accent);
   font-family: var(--font);
   font-size: 22px;
-  font-weight: 600;
+  font-weight: 700;
 }
-.tx-label--faint { fill: var(--text-faint); font-weight: 500; font-size: 19px; }
-.tx-label--hq { fill: var(--accent); font-weight: 700; }
-.tx-label--left { text-anchor: end; }
-.tx-hq { fill: var(--accent); }
-.tx-hq-ring {
+.us-label--left { text-anchor: end; }
+.us-hq { fill: var(--white); stroke: var(--accent); stroke-width: 3; }
+.us-hq-ring {
   fill: none;
   stroke: var(--accent);
-  stroke-width: 2.5;
+  stroke-width: 2;
   opacity: 0.6;
   transform-origin: center;
-  animation: tx-pulse 2.4s ease-out infinite;
+  animation: us-pulse 2.4s ease-out infinite;
 }
-@keyframes tx-pulse {
-  0% { r: 12; opacity: 0.7; }
-  100% { r: 30; opacity: 0; }
+@keyframes us-pulse {
+  0% { r: 8; opacity: 0.7; }
+  100% { r: 26; opacity: 0; }
 }
-.tx-project {
+/* The pulse is decoration; a still ring reads the same. */
+@media (prefers-reduced-motion: reduce) {
+  .us-hq-ring { animation: none; opacity: 0.5; }
+}
+.us-project {
   fill: var(--accent);
   stroke: var(--white);
-  stroke-width: 2;
+  stroke-width: 1.5;
   cursor: pointer;
 }
-.tx-project:hover { fill: var(--accent-hover); }
+.us-project:hover { fill: var(--accent-hover); }
 
 .map-legend {
   display: flex;
@@ -779,14 +781,19 @@ p { text-wrap: pretty; }
   color: var(--text-soft);
 }
 .legend-item .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
-.dot-hq { background: var(--accent); }
-.dot-city { background: var(--white); border: 2px solid var(--accent); }
+.dot-hq { background: var(--white); border: 2px solid var(--accent); }
+.legend-item .dot-worked {
+  background: color-mix(in srgb, var(--accent) 62%, var(--bg));
+  border: 1px solid var(--accent);
+  border-radius: 2px;
+  width: 13px;
+  height: 10px;
+}
 .dot-project { background: var(--accent); border: 2px solid var(--white); }
 .map-note { text-align: center; margin-top: var(--space-4); font-size: var(--text-sm); color: var(--accent); font-weight: 600; }
 
 @media (max-width: 600px) {
-  .tx-label { font-size: 28px; }
-  .tx-label--faint { font-size: 24px; }
+  .us-label { font-size: 32px; }
 }
 
 /* ============================================================
@@ -1954,9 +1961,8 @@ html.js .reveal-group.in > * { opacity: 1; transform: none; }
 /* Five values across a narrower column would be unreadable slivers. */
 
 /* ---- Service map: was the tallest block on the page ---------- */
-[data-brand="ventures"] #areas #tx-map {
-  max-height: 380px;
-  width: auto;
+[data-brand="ventures"] #areas #us-map {
+  width: 100%;
   margin-inline: auto;
 }
 [data-brand="ventures"] #areas .map-wrap {
@@ -2370,7 +2376,7 @@ html.js .reveal-group.in > * { opacity: 1; transform: none; }
   border-radius: 4px;
   padding: var(--space-8);
 }
-[data-brand="ventures"] #areas #tx-map { max-height: 320px; }
+[data-brand="ventures"] #areas #us-map { width: 100%; height: auto; }
 
 /* City list as a two-column ledger rather than a row of grey pills. */
 [data-brand="ventures"] .area-list {
@@ -2495,15 +2501,22 @@ html.js .reveal-group.in > * { opacity: 1; transform: none; }
 
 @media (max-width: 700px) {
   [data-brand="ventures"] .hero-rail { grid-template-columns: repeat(2, 1fr); gap: var(--space-6); }
-  [data-brand="ventures"] .figures { grid-template-columns: 1fr; }
+  /* Stays a 2x2 grid on phones. One column stacked four numerals down a
+     narrow screen and left most of the band empty — the figures are short
+     enough to sit two-up, which keeps the whole ledger on one screen. */
+  [data-brand="ventures"] .figures { grid-template-columns: repeat(2, 1fr); }
   [data-brand="ventures"] .fig {
-    border-right: 0;
-    border-bottom: 1px solid var(--rule);
-    padding-block: var(--space-8);
-    /* Single column: every cell goes flush left again. */
-    padding-inline: 0;
+    padding-block: var(--space-6);
+    padding-inline: var(--space-4);
+    border-right: 1px solid var(--rule);
+    border-bottom: 0;
   }
-  [data-brand="ventures"] .fig:last-child { border-bottom: 0; }
+  [data-brand="ventures"] .fig:nth-child(2n) { border-right: 0; }
+  [data-brand="ventures"] .fig:nth-child(-n+2) { border-bottom: 1px solid var(--rule); }
+  /* Left column stays flush to the container edge. */
+  [data-brand="ventures"] .fig:nth-child(2n+1) { padding-left: 0; }
+  [data-brand="ventures"] .fig-n { font-size: clamp(2.4rem, 1.2rem + 6vw, 3.4rem); }
+  [data-brand="ventures"] .fig-l { margin-top: var(--space-2); }
   [data-brand="ventures"] .principles { grid-template-columns: 1fr; gap: var(--space-8); }
   [data-brand="ventures"] .rm { grid-template-columns: 2.2rem 1fr; row-gap: var(--space-4); }
   [data-brand="ventures"] .rm-media { grid-column: 2; aspect-ratio: 16 / 9; }
