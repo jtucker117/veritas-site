@@ -2060,3 +2060,17 @@ html.js .reveal-group.in > * { opacity: 1; transform: none; }
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: var(--space-8);
 }
+
+
+/* ---- Footer facts -------------------------------------------
+   Address and insurance status: the two things a buyer checks
+   before calling, and previously nowhere on either site. */
+.footer-meta {
+  font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.66rem;
+  line-height: 1.9;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin: 0;
+}
