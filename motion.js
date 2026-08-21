@@ -47,12 +47,24 @@
     var links = Array.prototype.slice.call(rail.querySelectorAll('a'));
     var active = null;
 
+    /* Whichever link the pill is currently sitting behind gets .is-lit, and
+       that — not .is-active — is what turns the label white.
+
+       They are not the same thing. .is-active tracks the section you have
+       scrolled to; the pill follows the pointer. Tying the white text to
+       .is-active meant that hovering any other link slid the pill away and
+       left the active label white on white paper, i.e. invisible. */
+    function light(el) {
+      links.forEach(function (a) { a.classList.toggle('is-lit', a === el); });
+    }
+
     function moveTo(el, show) {
-      if (!el) { pill.classList.remove('show'); return; }
+      if (!el) { pill.classList.remove('show'); light(null); return; }
       // offsetLeft is relative to .nav-links because it is position:relative.
       pill.style.width = el.offsetWidth + 'px';
       pill.style.transform = 'translateX(' + el.offsetLeft + 'px)';
       if (show !== false) pill.classList.add('show');
+      light(el);
     }
 
     links.forEach(function (a) {
