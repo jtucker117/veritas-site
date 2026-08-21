@@ -1481,6 +1481,7 @@ html.js .reveal-group.in > * { opacity: 1; transform: none; }
   .hero-cine { min-height: 92svh; padding-bottom: var(--space-8); }
   .cine-title { font-size: clamp(2.6rem, 1rem + 11vw, 5rem); margin-bottom: var(--space-4); }
   .cine-title .script { text-align: left; }
+}
   
 /* ============================================================
    ============================================================
@@ -1972,11 +1973,6 @@ html.js .reveal-group.in > * { opacity: 1; transform: none; }
     [data-brand="ventures"] #faq .faq-list { grid-column: 1; grid-row: auto; }
 }
 
-/* ---- Hero on phones -----------------------------------------
-   The values rail was rendering at desktop size in a narrow column,
-   reading as a stray bulleted list rather than a quiet caption. */
-@media (max-width: 700px) {
-  
 /* ============================================================
    HERO ON PORTRAIT VIEWPORTS
    ============================================================
@@ -2025,6 +2021,7 @@ html.js .reveal-group.in > * { opacity: 1; transform: none; }
   .hero-cine .container {
     padding-top: var(--space-8);
   }
+}
   
 /* ---- Portrait: wordmark sits on the grass --------------------
    The lockup is lifted out of the stack and pulled up over the base
@@ -2044,23 +2041,8 @@ html.js .reveal-group.in > * { opacity: 1; transform: none; }
   }
   /* Deepen the fade so the grass under the wordmark reads darker. */
   .hero-cine-media::after { height: 46%; }
+}
   
-/* ---- Values, inline within About -----------------------------
-   Was its own full section with a heading that restated the point
-   About and Why Us already make. Merged in as a row: all five items
-   kept, one screen of height and one redundant heading removed.
-   The #values id rides along so the nav anchor still resolves. */
-[data-brand="ventures"] .values-inline {
-  margin-top: clamp(var(--space-10), 6vw, var(--space-20));
-  padding-top: clamp(var(--space-8), 4vw, var(--space-12));
-  border-top: 1px solid var(--border-soft);
-}
-[data-brand="ventures"] .values-inline .values-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: var(--space-8);
-}
-
 
 /* ---- Footer facts -------------------------------------------
    Address and insurance status: the two things a buyer checks
@@ -2073,4 +2055,459 @@ html.js .reveal-group.in > * { opacity: 1; transform: none; }
   text-transform: uppercase;
   color: var(--text-faint);
   margin: 0;
+}
+
+
+/* ============================================================
+   ============================================================
+   2026-08 VENTURES OVERHAUL — THE HOLDING-COMPANY LAYER
+   ============================================================
+   The page below the hero was written in the contractor's voice and
+   dressed in the base stylesheet's generic dark cards: giant orange
+   adjectives in uneven boxes, three division cards in blue / green /
+   purple, two "Coming Soon" badges, a full-bleed reprint of the hero
+   photograph, and the same four claims made twice.
+
+   This layer re-voices it as the parent company:
+     · one accent, spent almost nowhere
+     · an editorial serif for the display voice, so the heavy sans
+       wordmark reads as the *mark* and the headings as the *voice*
+     · figures instead of adjectives
+     · one section rhythm, not eight ad-hoc ones
+
+   Fenced as one block: delete from here to EOF to revert.
+   ============================================================ */
+
+[data-brand="ventures"] {
+  /* Warm off-white. Pure #FFF on near-black is harsh and reads cheap. */
+  --paper: #EFEBE4;
+  --paper-soft: rgba(239, 235, 228, 0.60);
+  --paper-faint: rgba(239, 235, 228, 0.38);
+  --rule: rgba(239, 235, 228, 0.13);
+  --mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* One rhythm for every section, so the page stops lurching. */
+  --sec: clamp(4.5rem, 9vw, 8rem);
+}
+
+[data-brand="ventures"] .section { padding-block: var(--sec); }
+
+/* ---- The display voice --------------------------------------
+   Instrument Serif was already loaded for one italic accent word.
+   Promoting it to the heading face is the single largest change in
+   perceived tier, and costs nothing — the font is already on the wire. */
+[data-brand="ventures"] .display {
+  font-family: var(--font-script);
+  font-style: normal;
+  font-weight: 400;
+  text-transform: none;
+  font-size: clamp(2.3rem, 1.3rem + 3.2vw, 4.4rem);
+  line-height: 1.0;
+  letter-spacing: -0.015em;
+  color: var(--paper);
+  max-width: 18ch;
+  margin: 0;
+}
+[data-brand="ventures"] .display .script { font-size: 1em; }
+
+[data-brand="ventures"] .lede { max-width: var(--content); }
+[data-brand="ventures"] .lede-copy {
+  margin-top: var(--space-6);
+  font-size: clamp(1.02rem, 0.95rem + 0.35vw, 1.22rem);
+  font-weight: 300;
+  line-height: 1.68;
+  color: var(--paper-soft);
+  max-width: 48ch;
+}
+
+/* Shared micro-label: mono, uppercase, wide. Used for every small
+   piece of chrome on the page so they all belong to one family. */
+[data-brand="ventures"] .hero-rail dt,
+[data-brand="ventures"] .fig-l,
+[data-brand="ventures"] .rm-num,
+[data-brand="ventures"] .rm-state,
+[data-brand="ventures"] .rm-year,
+[data-brand="ventures"] .rm-link,
+[data-brand="ventures"] .thesis-note,
+[data-brand="ventures"] .area-list li,
+[data-brand="ventures"] .area-note,
+[data-brand="ventures"] .close-addr {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  font-weight: 400;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   HERO FOOT — an annual-report rail
+   ============================================================
+   Replaces the floating glass spec card and the two explainer
+   paragraphs that followed it. Four facts, hairline separated. */
+[data-brand="ventures"] .hero-rail {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-8);
+  margin-top: clamp(var(--space-10), 6vw, var(--space-16));
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--rule);
+}
+[data-brand="ventures"] .hero-rail dt { color: var(--paper-faint); }
+[data-brand="ventures"] .hero-rail dd {
+  margin: 0.5rem 0 0;
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--paper);
+}
+
+/* ============================================================
+   FIGURES — the "doing real work" band
+   ============================================================
+   Was four stat cards setting Local / Honest / Quality / Built to Last
+   in oversized orange, in boxes of unequal height. Adjectives in a box
+   are the cheapest thing a page can do; a ledger of numbers is the
+   most expensive. Numerals animate via motion.js [data-count-to]. */
+[data-brand="ventures"] .figures {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: clamp(var(--space-12), 7vw, var(--space-20));
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+[data-brand="ventures"] .fig {
+  padding: clamp(var(--space-8), 3.4vw, var(--space-12)) var(--space-6);
+  border-right: 1px solid var(--rule);
+}
+/* The band aligns flush to the container, so only the first cell drops its
+   left inset. Without this the other three sit hard against the hairline. */
+[data-brand="ventures"] .fig:first-child { padding-left: 0; }
+[data-brand="ventures"] .fig:last-child { border-right: 0; }
+[data-brand="ventures"] .fig-n {
+  margin: 0;
+  font-family: var(--font-script);
+  font-size: clamp(2.8rem, 1.6rem + 3.6vw, 5rem);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  color: var(--paper);
+  font-variant-numeric: lining-nums;
+}
+[data-brand="ventures"] .fig-l {
+  margin-top: var(--space-4);
+  line-height: 1.4;
+  color: var(--paper-soft);
+  max-width: 22ch;
+}
+
+/* ============================================================
+   OPERATING PRINCIPLES
+   ============================================================
+   Was the Efficient / Clean / Quick / Clear icon row *and* the whole
+   "Why Veritas" section, which restated the same four claims one
+   screen later. One list, no icons, no boxes, no duplication. */
+[data-brand="ventures"] .principles {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(var(--space-6), 3vw, var(--space-12));
+  margin-top: clamp(var(--space-10), 5vw, var(--space-16));
+  list-style: none;
+  padding: 0;
+}
+[data-brand="ventures"] .principles h4 {
+  margin: 0 0 var(--space-3);
+  font-size: 0.98rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--paper);
+}
+[data-brand="ventures"] .principles p {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 300;
+  line-height: 1.65;
+  color: var(--paper-faint);
+}
+
+/* ============================================================
+   DIVISIONS — dated roadmap
+   ============================================================
+   Was three equal cards, each with its own accent colour (blue,
+   green, purple) against an orange brand, two of them wearing a
+   "Coming Soon" pill. Numbered rows on hairlines read as a plan
+   being executed in order; three equal cards read as one real
+   company and two placeholders. */
+[data-brand="ventures"] .roadmap {
+  margin-top: clamp(var(--space-10), 5vw, var(--space-16));
+  list-style: none;
+  padding: 0;
+  border-top: 1px solid var(--rule);
+}
+[data-brand="ventures"] .rm {
+  display: grid;
+  grid-template-columns: 3rem 220px 1fr auto;
+  align-items: center;
+  gap: clamp(var(--space-6), 3vw, var(--space-12));
+  padding-block: clamp(var(--space-6), 2.6vw, var(--space-10));
+  border-bottom: 1px solid var(--rule);
+}
+[data-brand="ventures"] .rm-num { color: var(--paper-soft); align-self: start; padding-top: 0.5rem; }
+[data-brand="ventures"] .rm-media {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 3px;
+  background: var(--vv-graphite);
+}
+[data-brand="ventures"] .rm-media img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  /* Held back a touch so the row reads as a document, not a gallery;
+     it comes up to full strength on hover. */
+  filter: saturate(0.72) brightness(0.88);
+  transform: scale(1.02);
+  transition: filter 0.6s var(--ease), transform 0.9s var(--ease);
+}
+[data-brand="ventures"] .rm:hover .rm-media img {
+  filter: saturate(1) brightness(1);
+  transform: scale(1.06);
+}
+[data-brand="ventures"] .rm-body h3 {
+  margin: 0;
+  font-family: var(--font-script);
+  font-weight: 400;
+  text-transform: none;
+  font-size: clamp(1.5rem, 1.1rem + 1.1vw, 2.1rem);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--paper);
+}
+[data-brand="ventures"] .rm-body p {
+  margin: var(--space-3) 0 0;
+  font-size: 0.92rem;
+  font-weight: 300;
+  line-height: 1.65;
+  color: var(--paper-faint);
+  max-width: 46ch;
+}
+[data-brand="ventures"] .rm-link {
+  display: inline-block;
+  margin-top: var(--space-4);
+  color: var(--paper-soft);
+  text-decoration: underline;
+  text-decoration-color: var(--rule);
+  text-underline-offset: 6px;
+  transition: color 0.3s var(--ease), text-decoration-color 0.3s var(--ease);
+}
+[data-brand="ventures"] .rm-link:hover {
+  color: var(--accent);
+  text-decoration-color: var(--accent);
+}
+[data-brand="ventures"] .rm-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+  text-align: right;
+}
+[data-brand="ventures"] .rm-state {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--paper-soft);
+}
+/* The one live division earns the only accent mark in the list. */
+[data-brand="ventures"] .rm-state.is-live::before {
+  content: "";
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+[data-brand="ventures"] .rm-year { color: var(--paper-faint); }
+
+/* ============================================================
+   THESIS BAND
+   ============================================================
+   Was .cine-statement: the hero photograph printed a second time,
+   full bleed, 1,486px tall, with a 14px caption pinned to its bottom
+   edge. Same rhythm break, typographic, a third of the height. */
+[data-brand="ventures"] .thesis {
+  /* No outer padding: the neighbouring section's own padding-block already
+     supplies the gap, and .thesis .container pads inside its own rules.
+     Having all three stacked opened a ~250px dead band above the quote. */
+  padding-block: 0;
+  text-align: center;
+}
+[data-brand="ventures"] .thesis .container {
+  padding-block: clamp(var(--space-10), 5vw, var(--space-16));
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+[data-brand="ventures"] .thesis-line {
+  margin: 0;
+  font-family: var(--font-script);
+  font-size: clamp(2rem, 1.1rem + 3.2vw, 4rem);
+  line-height: 1.18;
+  letter-spacing: -0.015em;
+  color: var(--paper);
+}
+[data-brand="ventures"] .thesis-note {
+  margin: var(--space-8) 0 0;
+  color: var(--paper-faint);
+}
+
+/* ============================================================
+   AREAS
+   ============================================================
+   The map used to float alone in a 1,260px-tall section. Paired with
+   the copy it costs half the height and reads twice as deliberate. */
+[data-brand="ventures"] .areas-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(var(--space-10), 6vw, var(--space-24));
+  align-items: center;
+}
+[data-brand="ventures"] #areas .map-wrap {
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: var(--space-8);
+}
+[data-brand="ventures"] #areas #tx-map { max-height: 320px; }
+
+/* City list as a two-column ledger rather than a row of grey pills. */
+[data-brand="ventures"] .area-list {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: calc(var(--space-8) * 2);
+  row-gap: 0;
+  margin-top: clamp(var(--space-8), 4vw, var(--space-10));
+  list-style: none;
+  padding: 0;
+  max-width: 34rem;
+}
+[data-brand="ventures"] .area-list li {
+  width: calc(50% - var(--space-8));
+  padding: 0.62rem 0;
+  /* The base rule sets `border` on all four sides to draw the pill.
+     Clear it first, or the leftovers box each city in. */
+  border: 0;
+  border-top: 1px solid var(--rule);
+  border-radius: 0;
+  background: none;
+  color: var(--paper-soft);
+}
+[data-brand="ventures"] .area-note {
+  margin-top: var(--space-8);
+  color: var(--paper-faint);
+}
+
+/* ============================================================
+   FAQ
+   ============================================================
+   The split layout pinned the heading in a narrow left column and
+   left the right half of the section empty above the fold. The new
+   markup wraps the heading in .lede, so the old grid is undone. */
+[data-brand="ventures"] #faq > .container {
+  display: block;
+}
+[data-brand="ventures"] #faq .faq-list {
+  margin-top: clamp(var(--space-10), 5vw, var(--space-16));
+  max-width: none;
+  border-top: 1px solid var(--rule);
+}
+[data-brand="ventures"] #faq .faq-item {
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  border-radius: 0;
+  padding: 0;
+}
+[data-brand="ventures"] #faq .faq-item summary {
+  font-family: var(--font-script);
+  font-weight: 400;
+  text-transform: none;
+  font-size: clamp(1.15rem, 1rem + 0.6vw, 1.5rem);
+  letter-spacing: -0.01em;
+  color: var(--paper);
+  padding: clamp(var(--space-6), 2.4vw, var(--space-8)) 0;
+}
+[data-brand="ventures"] #faq .faq-item p {
+  font-size: 0.95rem;
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--paper-soft);
+  max-width: 60ch;
+  padding: 0 0 clamp(var(--space-6), 2.4vw, var(--space-8));
+}
+
+/* ============================================================
+   CLOSE
+   ============================================================
+   Was a bordered card holding two emoji, a phone number that does
+   not exist yet, and two buttons competing for the same click. */
+[data-brand="ventures"] .close { text-align: center; }
+[data-brand="ventures"] .close-inner { padding-top: 0; }
+[data-brand="ventures"] .close .eyebrow { justify-content: center; }
+[data-brand="ventures"] .close-title {
+  max-width: none;
+  margin-inline: auto;
+  font-size: clamp(2.4rem, 1.2rem + 4.2vw, 5.4rem);
+  line-height: 1.06;
+}
+[data-brand="ventures"] .close-mail {
+  display: inline-block;
+  margin-top: clamp(var(--space-10), 5vw, var(--space-12));
+  font-family: var(--font-script);
+  font-size: clamp(1.3rem, 1rem + 1.2vw, 2.1rem);
+  letter-spacing: -0.01em;
+  color: var(--paper);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 10px;
+  text-decoration-color: var(--rule);
+  transition: color 0.3s var(--ease), text-decoration-color 0.3s var(--ease);
+}
+[data-brand="ventures"] .close-mail:hover {
+  color: var(--accent);
+  text-decoration-color: var(--accent);
+}
+[data-brand="ventures"] .close-addr {
+  margin-top: var(--space-8);
+  color: var(--paper-faint);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1000px) {
+  [data-brand="ventures"] .figures,
+  [data-brand="ventures"] .principles { grid-template-columns: repeat(2, 1fr); }
+  [data-brand="ventures"] .fig:nth-child(2n) { border-right: 0; }
+  [data-brand="ventures"] .fig:nth-child(-n+2) { border-bottom: 1px solid var(--rule); }
+  [data-brand="ventures"] .areas-grid { grid-template-columns: 1fr; }
+  [data-brand="ventures"] .rm { grid-template-columns: 2.5rem 160px 1fr; }
+  [data-brand="ventures"] .rm-meta {
+    grid-column: 2 / -1;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-6);
+    margin-top: var(--space-4);
+  }
+}
+
+@media (max-width: 700px) {
+  [data-brand="ventures"] .hero-rail { grid-template-columns: repeat(2, 1fr); gap: var(--space-6); }
+  [data-brand="ventures"] .figures { grid-template-columns: 1fr; }
+  [data-brand="ventures"] .fig {
+    border-right: 0;
+    border-bottom: 1px solid var(--rule);
+    padding-block: var(--space-8);
+    /* Single column: every cell goes flush left again. */
+    padding-inline: 0;
+  }
+  [data-brand="ventures"] .fig:last-child { border-bottom: 0; }
+  [data-brand="ventures"] .principles { grid-template-columns: 1fr; gap: var(--space-8); }
+  [data-brand="ventures"] .rm { grid-template-columns: 2.2rem 1fr; row-gap: var(--space-4); }
+  [data-brand="ventures"] .rm-media { grid-column: 2; aspect-ratio: 16 / 9; }
+  [data-brand="ventures"] .rm-body { grid-column: 2; }
+  [data-brand="ventures"] .rm-meta { grid-column: 2; }
+  [data-brand="ventures"] .area-list li { width: 100%; }
 }
