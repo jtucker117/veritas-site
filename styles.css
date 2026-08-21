@@ -1915,7 +1915,6 @@ html.js .reveal-group.in > * { opacity: 1; transform: none; }
 }
 
 /* ---- Split layout: sticky heading left, content right -------- */
-[data-brand="ventures"] #values > .container,
 [data-brand="ventures"] #faq > .container {
   display: grid;
   grid-template-columns: minmax(220px, 0.8fr) 1.6fr;
@@ -1923,14 +1922,12 @@ html.js .reveal-group.in > * { opacity: 1; transform: none; }
   align-items: start;
 }
 /* The eyebrow + heading form the pinned column. */
-[data-brand="ventures"] #values > .container > .eyebrow,
 [data-brand="ventures"] #faq > .container > .eyebrow {
   grid-column: 1;
   grid-row: 1;
   position: sticky;
   top: 128px;
 }
-[data-brand="ventures"] #values > .container > .section-title,
 [data-brand="ventures"] #faq > .container > .section-title {
   grid-column: 1;
   grid-row: 2;
@@ -1938,16 +1935,11 @@ html.js .reveal-group.in > * { opacity: 1; transform: none; }
   top: 168px;
   margin-bottom: 0 !important;
 }
-[data-brand="ventures"] #values .values-grid,
 [data-brand="ventures"] #faq .faq-list {
   grid-column: 2;
   grid-row: 1 / -1;
 }
 /* Five values across a narrower column would be unreadable slivers. */
-[data-brand="ventures"] #values .values-grid {
-  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-  gap: var(--space-10) var(--space-8);
-}
 
 /* ---- Service map: was the tallest block on the page ---------- */
 [data-brand="ventures"] #areas #tx-map {
@@ -1960,17 +1952,13 @@ html.js .reveal-group.in > * { opacity: 1; transform: none; }
 }
 
 @media (max-width: 900px) {
-  [data-brand="ventures"] #values > .container,
-  [data-brand="ventures"] #faq > .container { grid-template-columns: 1fr; }
-  [data-brand="ventures"] #values > .container > .eyebrow,
-  [data-brand="ventures"] #faq > .container > .eyebrow,
-  [data-brand="ventures"] #values > .container > .section-title,
-  [data-brand="ventures"] #faq > .container > .section-title {
+    [data-brand="ventures"] #faq > .container { grid-template-columns: 1fr; }
+    [data-brand="ventures"] #faq > .container > .eyebrow,
+    [data-brand="ventures"] #faq > .container > .section-title {
     position: static;
     grid-column: 1;
   }
-  [data-brand="ventures"] #values .values-grid,
-  [data-brand="ventures"] #faq .faq-list { grid-column: 1; grid-row: auto; }
+    [data-brand="ventures"] #faq .faq-list { grid-column: 1; grid-row: auto; }
 }
 
 /* ---- Hero on phones -----------------------------------------
@@ -2046,3 +2034,18 @@ html.js .reveal-group.in > * { opacity: 1; transform: none; }
   /* Deepen the fade so the grass under the wordmark reads darker. */
   .hero-cine-media::after { height: 46%; }
   
+/* ---- Values, inline within About -----------------------------
+   Was its own full section with a heading that restated the point
+   About and Why Us already make. Merged in as a row: all five items
+   kept, one screen of height and one redundant heading removed.
+   The #values id rides along so the nav anchor still resolves. */
+[data-brand="ventures"] .values-inline {
+  margin-top: clamp(var(--space-10), 6vw, var(--space-20));
+  padding-top: clamp(var(--space-8), 4vw, var(--space-12));
+  border-top: 1px solid var(--border-soft);
+}
+[data-brand="ventures"] .values-inline .values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--space-8);
+}
