@@ -84,8 +84,8 @@
 
   --radius:      14px;
   --radius-sm:   8px;
-  /* Pill/circle radius. Referenced by .badge-soon, .area-list li and
-     .chat-launcher but never defined — so every one of those
+  /* Pill/circle radius. Referenced by .badge-soon and .chat-launcher
+     but never defined — so every one of those
      border-radius declarations was invalid and silently fell back to a
      square corner. */
   --radius-full: 999px;
@@ -632,24 +632,6 @@ p { text-wrap: pretty; }
   border-radius: var(--radius-full);
   padding: 4px 12px;
   margin-bottom: var(--space-4);
-}
-
-/* ============================================================
-   AREAS WE SERVE (chip list)
-   ============================================================ */
-.area-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-3);
-}
-.area-list li {
-  font-size: var(--text-sm);
-  font-weight: 500;
-  color: var(--white);
-  background: color-mix(in srgb, var(--bg) 60%, #000);
-  border: 1px solid var(--border-soft);
-  border-radius: var(--radius-full);
-  padding: 0.5rem 1rem;
 }
 
 /* ============================================================
@@ -2134,7 +2116,6 @@ html.js .reveal-group.in > * { opacity: 1; transform: none; }
 [data-brand="ventures"] .rm-year,
 [data-brand="ventures"] .rm-link,
 [data-brand="ventures"] .thesis-note,
-[data-brand="ventures"] .area-list li,
 [data-brand="ventures"] .area-note,
 [data-brand="ventures"] .close-addr {
   font-family: var(--mono);
@@ -2378,28 +2359,6 @@ html.js .reveal-group.in > * { opacity: 1; transform: none; }
 }
 [data-brand="ventures"] #areas #us-map { width: 100%; height: auto; }
 
-/* City list as a two-column ledger rather than a row of grey pills. */
-[data-brand="ventures"] .area-list {
-  display: flex;
-  flex-wrap: wrap;
-  column-gap: calc(var(--space-8) * 2);
-  row-gap: 0;
-  margin-top: clamp(var(--space-8), 4vw, var(--space-10));
-  list-style: none;
-  padding: 0;
-  max-width: 34rem;
-}
-[data-brand="ventures"] .area-list li {
-  width: calc(50% - var(--space-8));
-  padding: 0.62rem 0;
-  /* The base rule sets `border` on all four sides to draw the pill.
-     Clear it first, or the leftovers box each city in. */
-  border: 0;
-  border-top: 1px solid var(--rule);
-  border-radius: 0;
-  background: none;
-  color: var(--paper-soft);
-}
 [data-brand="ventures"] .area-note {
   margin-top: var(--space-8);
   color: var(--paper-faint);
@@ -2522,5 +2481,4 @@ html.js .reveal-group.in > * { opacity: 1; transform: none; }
   [data-brand="ventures"] .rm-media { grid-column: 2; aspect-ratio: 16 / 9; }
   [data-brand="ventures"] .rm-body { grid-column: 2; }
   [data-brand="ventures"] .rm-meta { grid-column: 2; }
-  [data-brand="ventures"] .area-list li { width: 100%; }
 }
