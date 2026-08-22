@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" data-brand="ventures">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ============================================================
+       PAGE: 404 — VERITAS VENTURES
+       Served by server.js's catch-all with a real 404 status, not by a
+       static file match. data-brand="ventures" is required: the whole
+       overhaul layer (.display, .lede-copy) is scoped to it.
+       Nav/footer anchors are absolute (/#about) because this page can
+       render at any URL — a bare #about would resolve against /whatever.
+       noindex: a soft-404 in the index is worse than no page at all.
+       ============================================================ -->
+
+  <title>Page not found | Veritas Ventures</title>
+  <meta name="description" content="No record of this page. Head back to the Veritas Ventures home page." />
+  <meta name="robots" content="noindex, follow" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet" />
+
+  <link rel="icon" href="favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png" />
+
+  <link rel="stylesheet" href="styles.css?v=2" />
+
+  <!-- Scoped to this page. Literal lengths rather than token vars: the
+       spacing scale here has no --space-5, and an undefined var with no
+       fallback silently no-ops (see .project-meta, styles.css:580). -->
+  <style>
+    .nf { min-height: 64vh; display: flex; align-items: center; }
+    .nf-inner { max-width: 46rem; }
+    .nf-num {
+      font-family: "IBM Plex Mono", ui-monospace, monospace;
+      font-size: clamp(4rem, 15vw, 9rem);
+      line-height: 0.9;
+      letter-spacing: -0.03em;
+      color: var(--accent);
+      margin-bottom: 1.75rem;
+    }
+    .nf-links { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
+  </style>
+</head>
+<body>
+  <header class="site-header" id="header">
+    <div class="container nav">
+      <a href="/" class="logo" aria-label="Veritas Ventures home">
+        <img src="images/veritas-ventures-logo.png" alt="Veritas Ventures" style="height:42px;width:auto" />
+      </a>
+
+      <nav class="nav-links" id="navLinks" aria-label="Primary" data-pill>
+        <a href="/#about">About</a>
+        <a href="/#companies">Divisions</a>
+        <a href="/#areas">Areas</a>
+        <a href="/#faq">FAQ</a>
+        <a href="https://www.veritasbuilderstx.com/">Builders</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="/#contact" data-magnetic>Contact</a>
+        <a href="/#contact" data-magnetic>
+          Request a Consultation
+          <svg viewBox="0 0 26 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+            <path class="arrow-line" d="M0 6h20" />
+            <path d="M18 2l4 4-4 4" />
+          </svg>
+        </a>
+      </div>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="section nf">
+      <div class="container nf-inner">
+        <span class="eyebrow">Error 404</span>
+        <p class="nf-num">404</p>
+        <h1 class="display">No record of this page.</h1>
+        <p class="lede-copy">
+          The address you followed may have moved, or it never existed.
+          Everything about the group is one click away.
+        </p>
+        <div class="nf-links">
+          <a href="/" class="btn btn-primary">Back to home</a>
+          <a href="/#companies" class="btn btn-ghost">Our divisions</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <a href="/" class="logo" aria-label="Veritas Ventures home">
+        <img src="images/veritas-ventures-logo.png" alt="Veritas Ventures" style="height:36px;width:auto" />
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/#about">About</a>
+        <a href="/#companies">Divisions</a>
+        <a href="/#areas">Areas We Serve</a>
+        <a href="/#faq">FAQ</a>
+        <a href="/#contact">Contact</a>
+        <a href="https://www.veritasbuilderstx.com/">Veritas Builders</a>
+      </nav>
+      <p class="footer-meta">
+        33219 Forest West St, Magnolia, TX 77354<br />
+        Fully insured &mdash; general liability &amp; workers&rsquo; compensation
+      </p>
+      <p class="footer-copy">© <span id="year"></span> Veritas Ventures &middot; Magnolia, TX. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="main.js?v=2"></script>
+  <script src="motion.js?v=2"></script>
+</body>
+</html>

@@ -381,6 +381,15 @@ app.get(/^\/blog(\/.*)?$/, (req, res) => res.redirect(301, BUILDERS_HOME + req.o
 app.use(express.static(__dirname, { extensions: ['html'] }));
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 
+// ---- Not found ----
+// Anything reaching here matched no redirect, no route and no file on disk.
+// Without this Express answers with its own plain-text "Cannot GET /whatever".
+// API paths still get JSON so a bad fetch doesn't come back as a page of HTML.
+app.use((req, res) => {
+  if (req.path.startsWith('/api/')) return res.status(404).json({ ok: false, error: 'Not found' });
+  res.status(404).sendFile(path.join(__dirname, '404.html'));
+});
+
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Veritas site on ${PORT} | AI: ${HAS_AI ? 'on' : 'off'} | Email: ${HAS_EMAIL ? 'on' : 'off'} | Model: ${MODEL}`);
 });
